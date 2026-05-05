@@ -1,0 +1,15 @@
+{{ if .IsHome }}
+{{/* Homepage-only background: topographic + wave-line fusion in sky-blue */}}
+{{ $svg := `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200' width='200' height='200'><g fill='none' stroke='%230ea5e9' stroke-width='1' stroke-opacity='0.19' stroke-linecap='round'><path d='M0,30 Q50,15 100,30 T200,30'/><path d='M0,55 Q50,70 100,55 T200,55'/><path d='M0,82 Q50,67 100,82 T200,82'/><path d='M0,108 Q50,123 100,108 T200,108'/><path d='M0,135 Q50,120 100,135 T200,135'/><path d='M0,162 Q50,177 100,162 T200,162'/><path d='M0,190 Q50,175 100,190 T200,190'/></g></svg>` }}
+<style>
+  body {
+    background-image: url("data:image/svg+xml;utf8,{{ $svg | safeHTMLAttr }}");
+    background-size: 200px 200px;
+    background-repeat: repeat;
+    background-attachment: fixed;
+  }
+  html.dark body {
+    background-image: url("data:image/svg+xml;utf8,{{ $svg | replace "%230ea5e9" "%2338bdf8" | safeHTMLAttr }}");
+  }
+</style>
+{{ end }}

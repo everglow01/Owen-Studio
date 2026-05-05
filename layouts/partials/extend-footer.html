@@ -1,0 +1,15 @@
+<script>
+  // TOC clicks: replace history entry instead of pushing one,
+  // so the browser back button returns to the previous page,
+  // not the previous anchor.
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest('#TableOfContents a[href^="#"]');
+    if (!a) return;
+    var id = decodeURIComponent(a.getAttribute('href').slice(1));
+    var target = document.getElementById(id);
+    if (!target) return;
+    e.preventDefault();
+    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    history.replaceState(null, '', '#' + id);
+  });
+</script>
