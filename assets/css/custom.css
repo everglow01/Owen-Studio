@@ -1,0 +1,12 @@
+/* ===== 卡片悬浮效果 ===== */
+section.grid > div {
+  transition: transform 0.18s ease;
+}
+section.grid > div:hover {
+  transform: translateY(-3px);
+}
+
+/* ===== 主页 profile 区域：头像柔和阴影 ===== */
+main img.rounded-full {
+  box-shadow: 0 8px 24px -8px rgba(14, 165, 233, 0.35);
+}

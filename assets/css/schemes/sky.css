@@ -1,0 +1,39 @@
+/* Sky scheme — 天蓝色主题 */
+:root {
+  /* Neutral：略带蓝调的米白，区别于纯白，保持柔和 */
+  --color-neutral: 244, 250, 255;       /* 主背景：极浅天蓝白 #f4faff */
+  --color-neutral-50: 234, 244, 252;
+  --color-neutral-100: 219, 234, 246;
+  --color-neutral-200: 196, 217, 233;
+  --color-neutral-300: 163, 188, 207;
+  --color-neutral-400: 124, 152, 175;
+  --color-neutral-500: 88, 117, 142;
+  --color-neutral-600: 64, 90, 113;
+  --color-neutral-700: 46, 68, 88;
+  --color-neutral-800: 28, 45, 62;
+  --color-neutral-900: 14, 27, 40;
+
+  /* Primary：Tailwind sky 调色板 */
+  --color-primary-50: 240, 249, 255;
+  --color-primary-100: 224, 242, 254;
+  --color-primary-200: 186, 230, 253;
+  --color-primary-300: 125, 211, 252;
+  --color-primary-400: 56, 189, 248;
+  --color-primary-500: 14, 165, 233;    /* 强调色 #0ea5e9 */
+  --color-primary-600: 2, 132, 199;
+  --color-primary-700: 3, 105, 161;
+  --color-primary-800: 7, 89, 133;
+  --color-primary-900: 12, 74, 110;
+
+  /* Secondary：Tailwind cyan 调色板，作为辅助 */
+  --color-secondary-50: 236, 254, 255;
+  --color-secondary-100: 207, 250, 254;
+  --color-secondary-200: 165, 243, 252;
+  --color-secondary-300: 103, 232, 249;
+  --color-secondary-400: 34, 211, 238;
+  --color-secondary-500: 6, 182, 212;
+  --color-secondary-600: 8, 145, 178;
+  --color-secondary-700: 14, 116, 144;
+  --color-secondary-800: 21, 94, 117;
+  --color-secondary-900: 22, 78, 99;
+}

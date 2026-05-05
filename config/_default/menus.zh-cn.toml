@@ -1,0 +1,29 @@
+# -- Main Menu --
+# 顶部导航菜单。后续根据实际分类增减。
+
+[[main]]
+  name = "文章"
+  pageRef = "posts"
+  weight = 10
+
+[[main]]
+  name = "标签"
+  pageRef = "tags"
+  weight = 20
+
+[[main]]
+  name = "分类"
+  pageRef = "categories"
+  weight = 30
+
+[[main]]
+  identifier = "search"
+  pre = "magnifying-glass"
+  pageRef = "search"
+  weight = 40
+
+# -- Footer Menu --
+[[footer]]
+  name = "标签"
+  pageRef = "tags"
+  weight = 10
