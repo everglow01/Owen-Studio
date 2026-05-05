@@ -1,5 +1,5 @@
 ---
-title: "Ubuntu Markdown"
+title: "ubuntu20.04ROS和深度学习环境配置"
 date: 2026-05-05T12:48:01+08:00
 draft: false
 categories: ["linux"]
