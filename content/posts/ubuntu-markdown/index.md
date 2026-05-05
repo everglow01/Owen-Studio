@@ -7,7 +7,7 @@ tags: ["ROS", "OpenCV", "Ubuntu"]
 ---
 
 
-## 有关ROS
+## 一.有关ROS
 
 ### 1.工作空间的创建
 ```bash
@@ -51,7 +51,7 @@ type-->被运行的节点文件
 name-->为节点命名  
 output-->设置日志输出目标（可选）  
 
-## opencv安装、编译和验证(以4.6.0.66为例)
+## 二.opencv安装、编译和验证(以4.6.0.66为例)
 
 ### 1.opencv-cpp的下载和编译
 挂梯子，直接去官网的library ->release找到4.6.0的source直接下载   
@@ -68,13 +68,13 @@ output-->设置日志输出目标（可选）
 ```
   当你卸载了opencv-cpp或者需要重新catkin_make时(例如打开cuda-opencv),这一步需要重新安装编译依赖
 
-### 准备编译环境  
+### 2.准备编译环境  
 ```bash
     cd ~/opencv-4.6.0  
     mkdir build  
     cd build  
 ```
-### 编译命令  
+### 3.编译命令  
 ```bash
     cmake -D CMAKE_BUILD_TYPE=Release -D OPENCV_GENERATE_PKGCONFIG=YES ..  
 ```
@@ -91,15 +91,15 @@ output-->设置日志输出目标（可选）
 AMD处理器编译时有概率会出现卡顿，如果一直卡着请重新编译，这是AMDcpu架构的问题 
 
 
-### 安装  
+### 4.安装  
 ```bash
     sudo make install
 ```
-### 更新动态链接库缓存（可选） 
+### 5.更新动态链接库缓存（可选） 
 ```bash 
     sudo ldconfig
 ```
-### 验证安装有三个手段，最好都试一下
+*验证安装有三个手段，最好都试一下*  
 1.直接输入命令     
 ```bash
     pkg-config --modversion opencv4 
@@ -124,7 +124,7 @@ AMD处理器编译时有概率会出现卡顿，如果一直卡着请重新编�
 若能正确找到，安装成功  
 若不能，可能需要手动nano创建
 
-## 2.opencv-python的安装
+## 三.opencv-python的安装
 ```bash
     pip install opencv-python==4.6.0.66 
 ```  
@@ -137,17 +137,17 @@ ez
     >>>print(cv2.__version__)  
 ```
 
-## 2.5当完成cpp和py的安装后应验证
+## 四.当完成cpp和py的安装后应验证
 
 当你完成cpp和py的安装，应新建一个工作空间以验证ROS和Cmake是否能被正确编译  
 **这一步应该先于卸载和安装cv-bridge**
 
   
-## 3.opencv-bridge安装
+## 五.opencv-bridge安装
 
 首先确认ROS自带的bridge有没有被卸载干净  
 
-### 添加opencv4环境变量  
+### 1.添加opencv4环境变量  
 ```bash
     export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib  
     export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/usr/local/lib/pkgconfig
@@ -165,7 +165,7 @@ GitHub上搜索ROS的vision_opencv，选择**noetic**版本 code fork到本地
 
 最好是把pkg.xml的cv_name也改一下，不过不改也无所谓
 
-### 重新编译cv_bridge  
+### 2.重新编译cv_bridge  
 ```bash
     cd ~/your_catkin_ws  
     catkin_make clean  
@@ -186,7 +186,7 @@ GitHub上搜索ROS的vision_opencv，选择**noetic**版本 code fork到本地
 再次编译
 
 
-## 机器学习环境安装
+## 六.深度学习环境安装
 
 ### 1.nVidia显卡驱动安装  
 
@@ -238,7 +238,7 @@ sh过程中会弹出cuda的安装器，直接continue ->accept 最后取消勾�
 
 等待.......
 
-#### 配置环境变量
+### 3.配置环境变量
 进入根目录 
 ```bash
     cd ~  
@@ -258,13 +258,13 @@ sh过程中会弹出cuda的安装器，直接continue ->accept 最后取消勾�
 ```
 退出(ctrl+x)
 
-#### 检查是否安装完成
+### 4.检查是否安装完成
 nvcc -V（大写）  
 如果正确输出五行并且打印版本正确就行了  
 可以看看你安装的四个软件是否在软件目录中  
 
 ![alt 图片示例](https://img-blog.csdnimg.cn/9c49e83ff14e494ea1043fb5499406ed.png)
-### 3.pytorch安装(1.8.1 cuda加速版本)
+### 5.pytorch安装(1.8.1 cuda加速版本)
 
 确认已经安装正确的cuda全家桶 ，驱动也安装完毕  
 进入pytorch官网搜索pytorch1.8.1  
@@ -290,11 +290,11 @@ nvcc -V（大写）
 若输出True，则安装完毕  
 若False，重装  
 
-### ultralytics相关的准备
+## 七.ultralytics相关的准备
 
 主要会介绍yolov5和yolov8两种模型的本地部署和训练，此篇内容较简单，具体操作请查阅官方文档https://docs.ultralytics.com/zh  
 
-### yolov5的本地部署和训练
+### 1.yolov5的本地部署和训练
 
 确保在你的根目录下  
 ```bash
@@ -303,7 +303,7 @@ nvcc -V（大写）
     pip install -r requirements.txt  # install dependencies  
 直接在github上克隆下载整个文件夹
 ```
-#### 训练
+**训练**  
 
 命令：
 ```bash
@@ -316,7 +316,7 @@ yolov5n：所使用的神经网络模型类型
 batch-size：一批量的照片数量（请根据显卡显存以及所选神经网络模型类型决定，宁小勿大）  
 除此之外，你还需指定数据集的路径等等，此篇概不赘述，官方文档有详细解答  
 
-#### 用detect进行推理
+**用detect进行推理** 
 
 命令：
 ```bash
@@ -327,7 +327,7 @@ batch-size：一批量的照片数量（请根据显卡显存以及所选神经�
 
 **warning:本文只是概述了yolov5模型的使用，但绝不代表其功能仅限于此，请务必查阅官方文档了解更多**  
 
-### yolov8和ultralytics软件包
+### 2.yolov8和ultralytics软件包
 本地部署：
 ```bash
     pip install ultralytics
@@ -339,6 +339,5 @@ https://github.com/ultralytics/ultralytics
 https://github.com/ultralytics/assets/releases/tag/v8.2.0  
 与yolov5有所不同
 
-
-### AgroTect视觉与软件部内部资料，请勿外传
+***图片均来自网络，若有侵权请联系作者删除***
 
