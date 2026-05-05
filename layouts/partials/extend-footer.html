@@ -12,4 +12,18 @@
     target.scrollIntoView({ behavior: 'smooth', block: 'start' });
     history.replaceState(null, '', '#' + id);
   });
+
+  // Fill in view counts from GoatCounter for any [data-views-path] element.
+  (function () {
+    var nodes = document.querySelectorAll('[data-views-path]');
+    nodes.forEach(function (el) {
+      var path = el.getAttribute('data-views-path');
+      var url = 'https://owen-studio.goatcounter.com/counter/' +
+                encodeURIComponent(path) + '.json';
+      fetch(url)
+        .then(function (r) { return r.ok ? r.json() : null; })
+        .then(function (d) { el.textContent = d ? d.count : '0'; })
+        .catch(function () { el.textContent = '0'; });
+    });
+  })();
 </script>
