@@ -33,24 +33,66 @@ html.dark article.article-link--card:hover {
   background-color: rgba(48, 48, 54, 0.6);
 }
 
-/* ===== 代码块语言标签 ===== */
-.highlight-wrapper[data-lang]:not([data-lang="text"]):not([data-lang="plain"])::before {
-  content: attr(data-lang);
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 5;
-  padding: 0.15rem 0.6rem;
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 0.7rem;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: rgb(82, 82, 91);
-  background-color: rgba(228, 228, 231, 0.85);
-  border-bottom-right-radius: 0.375rem;
-  pointer-events: none;
+/* ===== 代码块顶部条（语言名 + 复制按钮） ===== */
+.codeblock-header {
+  display: flex;
+  align-items: center;
+  padding: 0.4rem 0.9rem;
+  background-color: #e5e7eb;
+  border-bottom: 1px solid #d1d5db;
+  font-size: 0.78rem;
+  color: #4b5563;
+  user-select: none;
 }
-html.dark .highlight-wrapper[data-lang]:not([data-lang="text"]):not([data-lang="plain"])::before {
-  color: rgb(212, 212, 216);
-  background-color: rgba(63, 63, 70, 0.85);
+html.dark .codeblock-header {
+  background-color: #161b22;
+  border-bottom-color: #30363d;
+  color: #c9d1d9;
+}
+.codeblock-lang {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  letter-spacing: 0.02em;
+  font-weight: 500;
+}
+.codeblock-title-text {
+  margin-left: 0.6rem;
+  font-style: italic;
+  opacity: 0.75;
+}
+
+/* 当存在 header 时，去掉代码 pre 的顶部圆角，避免与 header 错位 */
+.highlight-wrapper.has-header pre,
+.highlight-wrapper.has-header .chroma {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+/* 复制按钮：有 header 时常驻在 header 内右侧；无 header 时保留原 hover 行为 */
+.highlight-wrapper.has-header > .copy-button {
+  visibility: visible;
+  top: 0;
+  right: 0;
+  z-index: 5;
+  width: auto;
+  padding: 0.4rem 0.9rem;
+  border-radius: 0;
+  background-color: transparent;
+  color: #4b5563;
+  font-size: 0.78rem;
+  font-weight: 500;
+  opacity: 0.85;
+}
+.highlight-wrapper.has-header > .copy-button:hover,
+.highlight-wrapper.has-header > .copy-button:focus,
+.highlight-wrapper.has-header > .copy-button:active {
+  background-color: rgba(0, 0, 0, 0.06);
+  opacity: 1;
+}
+html.dark .highlight-wrapper.has-header > .copy-button {
+  color: #c9d1d9;
+}
+html.dark .highlight-wrapper.has-header > .copy-button:hover,
+html.dark .highlight-wrapper.has-header > .copy-button:focus,
+html.dark .highlight-wrapper.has-header > .copy-button:active {
+  background-color: rgba(255, 255, 255, 0.06);
 }

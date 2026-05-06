@@ -1,9 +1,16 @@
 {{- $title := or .Attributes.title "" -}}
 {{- $lang := or .Type "text" -}}
-<div class="highlight-wrapper" data-lang="{{ $lang }}">
-  {{- with $title -}}
-    <div class="codeblock-title">
-      {{- $title -}}
+{{- $hasLang := and (ne $lang "text") (ne $lang "plain") -}}
+{{- $showHeader := or $hasLang $title -}}
+<div class="highlight-wrapper{{ if $showHeader }} has-header{{ end }}" data-lang="{{ $lang }}">
+  {{- if $showHeader -}}
+    <div class="codeblock-header">
+      {{- if $hasLang -}}
+        <span class="codeblock-lang">{{ $lang }}</span>
+      {{- end -}}
+      {{- with $title -}}
+        <span class="codeblock-title-text">{{ . }}</span>
+      {{- end -}}
     </div>
   {{- end -}}
   {{- transform.Highlight .Inner $lang .Options -}}
