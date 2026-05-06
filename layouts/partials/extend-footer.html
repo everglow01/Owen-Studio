@@ -26,4 +26,27 @@
         .catch(function () { el.textContent = '0'; });
     });
   })();
+
+  // Sync Giscus theme with Blowfish's html.dark toggle.
+  (function () {
+    function syncGiscusTheme() {
+      var frame = document.querySelector('iframe.giscus-frame');
+      if (!frame || !frame.contentWindow) return;
+      var theme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+      frame.contentWindow.postMessage(
+        { giscus: { setConfig: { theme: theme } } },
+        'https://giscus.app'
+      );
+    }
+    // When the Giscus iframe finishes initializing it posts a message back.
+    window.addEventListener('message', function (e) {
+      if (e.origin !== 'https://giscus.app') return;
+      if (e.data && e.data.giscus) syncGiscusTheme();
+    });
+    // When Blowfish toggles the dark class on <html>, push the new theme.
+    new MutationObserver(syncGiscusTheme).observe(
+      document.documentElement,
+      { attributes: true, attributeFilter: ['class'] }
+    );
+  })();
 </script>
