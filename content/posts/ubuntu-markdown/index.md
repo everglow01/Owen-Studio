@@ -1,6 +1,6 @@
 ---
 title: "Ubuntu20.04-ROS和深度学习环境配置"
-date: 2026-05-05T12:48:01+08:00
+date: 2024-09-05T12:48:01+08:00
 draft: false
 categories: ["linux"]
 tags: ["ROS", "OpenCV", "Ubuntu"]
@@ -339,4 +339,7 @@ https://github.com/ultralytics/ultralytics
 https://github.com/ultralytics/assets/releases/tag/v8.2.0  
 与yolov5有所不同
 
-***图片均来自网络，若有侵权请联系作者删除***
+***图片均来自网络，若有侵权请联系作者删除***  
+***该博客指南专用于笔者实验室指导***  
+**如遇Linux安装问题请访问  
+https://blog.anawaert.com/post/tittle-tattle/installation-of-ubuntu/**

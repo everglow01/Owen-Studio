@@ -9,9 +9,12 @@ showAuthor: true
 showDateUpdated: false
 ---
 
+{{</* katex */>}}
+<!-- ↑ 启用数学公式（$x$ 行内 / $$x$$ 块级 / KaTeX 语法）。如不需要数学，删除这一行可省 ~280KB 加载 -->
 
 <!-- 写正文。在这个目录下放：
      cover.<ext>      → 卡片封面（约 1200x800，1.5:1）
      background.<ext> → 文章页 hero 大背景（约 1920x800，宽幅）
      正文里插图也放在这个目录，markdown 用 ![alt](图片名.png) 即可
 -->
+
