@@ -114,7 +114,7 @@ make
 ./opencv_example
 ```
 若无报错且正确弹出window：Hello OpenCV 安装成功  
-![alt 图片示例](https://img-blog.csdnimg.cn/501c6879eda24bc1966ff95233222ced.png)
+![alt 图片示例](hello.png)
 
 3.验证opencv.pc文件  
 命令：
@@ -154,7 +154,7 @@ export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/usr/local/lib/pkgconfig
 ```
 
 GitHub上搜索ROS的vision_opencv，选择**noetic**版本 code fork到本地
-![alt 图片示例](https://img-blog.csdnimg.cn/0ee5e6e181d84f0bae9ea962765cbf63.png)
+![alt 图片示例](ros_opencv.png)
 
 创建一个新的工作空间bridge_ws ,并camke，将cv-bridge解压到src目录下，并更改其CmakeList.txt  
 找到并更改  
@@ -226,7 +226,7 @@ tips：可以试试你的电脑能否调节亮度，如果可以，那也算是�
 
 去nv官网搜索cuda11.1 toolkit  选择Linux ->x86_64 ->ubuntu ->**20.04** ->runfile(local)
 
-![alt 实例图片](https://img-blog.csdnimg.cn/4c20c19d829d4df0936abcb696763a10.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA6K6h566X5py66KeG6KeJ5LuO6Zu25a2m,size_20,color_FFFFFF,t_70,g_se,x_16)
+![alt 实例图片](cuda.png)
 
 copy下面出现的命令  
 一般是wget.......  
@@ -234,7 +234,7 @@ sudo sh cuda.....
 自行安装 会比较慢  
 
 sh过程中会弹出cuda的安装器，直接continue ->accept 最后取消勾选driver（第一个） 因为前面我们已经装过了，下面四个勾上，如果让你选择yes or no全选yes，install按回车
-![alt 图片示例](https://img-blog.csdnimg.cn/a165fb70921749a6933b508694d81170.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA6K6h566X5py66KeG6KeJ5LuO6Zu25a2m,size_12,color_FFFFFF,t_70,g_se,x_16)
+![alt 图片示例](install.png)
 
 等待.......
 
@@ -263,7 +263,7 @@ nvcc -V（大写）
 如果正确输出五行并且打印版本正确就行了  
 可以看看你安装的四个软件是否在软件目录中  
 
-![alt 图片示例](https://img-blog.csdnimg.cn/9c49e83ff14e494ea1043fb5499406ed.png)
+![alt 图片示例](nvcc.png)
 ### 5.pytorch安装(1.8.1 cuda加速版本)
 
 确认已经安装正确的cuda全家桶 ，驱动也安装完毕  
@@ -332,7 +332,7 @@ python3 detect.py --weights yolov5s.pt --source img.jpg
 ```bash
 pip install ultralytics
 ```
-![alt 图片示例](https://raw.githubusercontent.com/ultralytics/assets/main/yolov8/banner-yolov8.png)
+![alt 图片示例](yolov8.png)
 
 具体功能查阅  
 https://github.com/ultralytics/ultralytics  
