@@ -107,9 +107,13 @@
         {{ end }}
       </div>
     {{ end }}
-    {{ if .Params.showSummary | default (.Site.Params.list.showSummary | default false) }}
-      <div class="article-link__summary prose dark:prose-invert mt-1 line-clamp-5">
-        {{ .Summary | plainify }}
+    {{ $desc := .Description }}
+    {{ if and (not $desc) (.Params.showSummary | default (.Site.Params.list.showSummary | default false)) }}
+      {{ $desc = .Summary }}
+    {{ end }}
+    {{ with $desc }}
+      <div class="article-link__summary prose dark:prose-invert mt-1 line-clamp-3 text-sm">
+        {{ . | plainify }}
       </div>
     {{ end }}
   </div>
