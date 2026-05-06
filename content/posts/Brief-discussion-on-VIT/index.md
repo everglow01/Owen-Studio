@@ -478,7 +478,7 @@ python onnx/export.py \
 
 ### 4.推理结果展示 
 训练结束后，使用推理脚本用训练好的pth文件进行推理，就能得到如下图所示的效果：
-![tomato1](tomato1.jpg)   
+![tomato2](tomato2.jpg)   
 ![car1](car1.jpg)  
 
 ## 总结和思考  
