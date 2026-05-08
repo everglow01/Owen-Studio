@@ -4,7 +4,7 @@ date: 2026-05-08T19:11:15+08:00
 draft: false
 categories: ["notes"]   # 必须是英文 slug，可选：2d-vision / 3d-vision / multimodal / notes / linux / tech-talk
 tags: ["YOLO","深度学习"]                    # 中文/英文随意，例如 ["ROS", "Ubuntu"]
-description: "介绍了YOLO系列模型从v3~v7，YOLO系列的逐渐成熟。"             # 一句话简介，会显示在卡片下和搜索结果
+description: "介绍了YOLO系列模型从v4~v7，YOLO系列逐渐走向稳定。"             # 一句话简介，会显示在卡片下和搜索结果
 showAuthor: true
 showDateUpdated: false
 ---
