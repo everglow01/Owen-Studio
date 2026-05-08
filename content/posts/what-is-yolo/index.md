@@ -1,5 +1,5 @@
 ---
-title: "YOLO的前世今生（1）"
+title: "YOLO的前世今生（上）"
 date: 2026-05-07T09:20:17+08:00
 draft: false
 categories: ["notes"]   # 必须是英文 slug，可选：2d-vision / 3d-vision / multimodal / notes / linux / tech-talk
