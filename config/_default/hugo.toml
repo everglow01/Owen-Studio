@@ -11,6 +11,7 @@ theme = "blowfish"
 # 注：CI 部署时会被 actions/configure-pages 自动覆盖，本地开发也不强依赖。
 baseURL = "https://everglow01.github.io/Owen-Studio/"
 defaultContentLanguage = "zh-cn"
+hasCJKLanguage = true
 
 # pluralizeListTitles = "true" # hugo function useful for non-english languages, find out more in  https://gohugo.io/getting-started/configuration/#pluralizelisttitles
 
