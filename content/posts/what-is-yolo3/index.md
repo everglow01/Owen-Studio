@@ -122,7 +122,7 @@ YOLOv8 也是 Ultralytics 正式接过 YOLO 演进主导权的标志。此后的
 
 ## YOLOv9
 ### 背景
-YOLOv9 由 **王建尧（Chien-Yao Wang）、叶宜豪（I-Hau Yeh）和廖弘源（Hong-Yuan Mark Liao）**于 2024 年 2 月发布，作者正是 YOLOv7 的原班人马，论文标题为 [《YOLOv9: Learning What You Want to Learn Using Programmable Gradient Information》](https://arxiv.org/abs/2402.13616)。
+YOLOv9 由**王建尧（Chien-Yao Wang）、叶宜豪（I-Hau Yeh）和廖弘源（Hong-Yuan Mark Liao）** 于 2024 年 2 月发布，作者正是 YOLOv7 的原班人马，论文标题为 [《YOLOv9: Learning What You Want to Learn Using Programmable Gradient Information》](https://arxiv.org/abs/2402.13616)。
 
 > **开源地址**：[github.com/WongKinYiu/yolov9](https://github.com/WongKinYiu/yolov9)
 
