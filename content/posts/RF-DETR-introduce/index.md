@@ -391,7 +391,7 @@ your_dataset/
 
 ### 推理部署：直接 ONNX / TensorRT   
 
-`model.export(format='onnx')` 出来的 ONNX 已经包含了完整的后处理（无需手动写NMS——RF-DETR 本身就不要 NMS），可以直接喂给 ONNX Runtime 或 TensorRT。Jetson 边缘设备(如CPU推理)上推荐走TensorRT路线，能直接吃满NAS当初为该硬件挤出来的延迟优化收益。   
+`model.export(format='onnx')` 出来的 ONNX 已经包含了完整的后处理（无需手动写NMS——RF-DETR 本身就不要 NMS），可以直接喂给 ONNX Runtime 或 TensorRT。Jetson 边缘设备上推荐走TensorRT路线，能直接吃满NAS当初为该硬件挤出来的延迟优化收益。   
 
 ```bash
 # CLI 也有等价命令
