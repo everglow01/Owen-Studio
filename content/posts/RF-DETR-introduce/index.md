@@ -247,7 +247,7 @@ $$\mathcal{L}_{\text{supernet}} = \mathcal{L}(\text{max}) + \mathcal{L}(\text{mi
 - **In-place Distillation（原地蒸馏）**：把最大 subnet 当作 Teacher，让较小的 subnet 在训练时不仅学 ground truth，还要学最大 subnet 的输出分布。等于把 DINOv2 学到的“自蒸馏”思想又复用了一遍——大网络给小网络当老师，让小网络的精度上限提升。
 - **BN 重校准**：因为不同 subnet 走的路径不同，每个 subnet 的 BatchNorm 统计量也不一样。Supernet 训完后，部署任何一个 subnet 前都要用一小批数据**重新跑一次 BN 统计**（实际上 RF-DETR 用的是 LayerNorm，在层层之间已经完整了Normalization，不需要这一步，但这是NAS相关文献里常见的坑）。   
 
-##### 搜索阶段：延迟感知的 Pareto 寻优   
+**搜索阶段：延迟感知的 Pareto 寻优**   
 Supernet 训练完成后，就到了真正的“搜索”环节。RF-DETR 关心的不只是“哪个架构精度最高”，而是 “在给定延迟预算下，哪个架构精度最高”——这是一个多目标优化问题。   
 
 形式化地写，我们要在搜索空间 $\mathcal{A}$ 中找出 **Pareto 前沿**：   
@@ -270,7 +270,7 @@ RF-DETR 采用 **进化算法（Evolutionary Search）** 搜索 Pareto 前沿：
 
 值得对比的是，这套**进化策略**在概念上和强化学习的 NAS 控制器是“等价目标，不同手段”：RL 用一个**参数化策略 $\pi_\phi$** 来输出架构序列、用 REINFORCE 优化 $\mathbb{E}_{a \sim \pi_\phi}[R(a)]$；而进化算法**不维护显式策略**，靠种群和选择算子隐式地“爬山”。在权重共享的设定下，每次评估代价非常低廉，进化算法的 sample-efficiency 反而更友好——这也是近几年 NAS 圈子从 RL 主流回归到进化/随机搜索的根本原因。   
 
-##### 延迟怎么算？为什么必须在真机上测？    
+**延迟怎么算？为什么必须在真机上测？**    
 NAS 论文里一个经常被忽视的坑是：**FLOPs 不等于 Latency**。两个 FLOPs 相同的架构，在同一块 GPU 上可能跑出 1.5 倍的延迟差，原因来自 memory bandwidth、kernel launch overhead、算子的 fusion 友好度等等。   
 
 RF-DETR 直接走最朴实但最有效的路线——在目标硬件上实测延迟。具体做法是：   
@@ -283,7 +283,7 @@ $$\text{Latency}(a) \approx \sum_{l \in a} \text{LUT}[l]$$
 
 这样既保证了搜索过程中评估延迟的速度（毫秒级），又保证了最终选出的架构效率在边缘上不会华而不实。   
 
-##### 输出：一族而非一个   
+**输出：一族而非一个**   
 最终 RF-DETR 不是产出一个固定的模型，而是**沿着 Pareto 前沿切出一族模型**：   
 
 | 模型 | 适配延迟档位 | 典型部署 |
@@ -296,7 +296,7 @@ $$\text{Latency}(a) \approx \sum_{l \in a} \text{LUT}[l]$$
 
 这是 RF-DETR 相对 RT-DETR 最大的范式差异：RT-DETR 是“一个网络结构，配几个不同大小的 backbone”，RF-DETR 是“一次性给你一族沿 Pareto 前沿分布的架构，每个都是该延迟档位下的最优解”。换句话说，RT-DETR 给的是手工挑出的几件成衣，RF-DETR 给的是一整条裁缝流水线，照着你要的延迟尺码当场出活。   
 
-##### 小结：NAS 给 RF-DETR 带来了什么   
+**小结：NAS 给 RF-DETR 带来了什么**   
 回到最初的问题——RF-DETR 凭什么号称“实时检测领域 SOTA”？这一节其实就是答案的核心：   
 
 1. **DINOv2 提供了强 backbone**（特征质量天花板高）。
