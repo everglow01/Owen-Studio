@@ -4,7 +4,7 @@ date: 2026-05-12T18:20:34+08:00
 draft: false
 categories: ["2d-version"]   # 必须是英文 slug，可选：2d-vision / 3d-vision / multimodal / notes / linux / tech-talk
 tags: ["RF-DETR"]                    # 中文/英文随意，例如 ["ROS", "Ubuntu"]
-description: "作为2025的实时检测 SOTA，RF-DETR是如何做到的？"             # 一句话简介，会显示在卡片下和搜索结果
+description: "作为2025年实时检测的 SOTA，RF-DETR是如何做到的？"             # 一句话简介，会显示在卡片下和搜索结果
 showAuthor: true
 showDateUpdated: false
 ---
