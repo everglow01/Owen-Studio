@@ -341,7 +341,7 @@ html.dark {
 .he-row {
   display: grid;
   grid-template-columns: 36px auto 1fr auto;
-  align-items: baseline;
+  align-items: start;
   gap: 1rem;
   padding: 1.1rem 0.4rem;
   color: var(--he-ink);
@@ -378,6 +378,26 @@ html.dark .he-row:hover {
 }
 .he-row__dot { opacity: 0.5; }
 .he-row__cat { color: var(--he-accent); }
+.he-row__body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  min-width: 0;
+}
+.he-row__desc {
+  font-family: 'Fraunces', 'Source Han Serif SC', serif;
+  font-style: italic;
+  font-weight: 300;
+  font-size: 0.92rem;
+  line-height: 1.5;
+  color: var(--he-muted);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 0;
+}
 .he-row__title {
   font-family: 'Fraunces', 'Source Han Serif SC', serif;
   font-size: 1.18rem;
@@ -414,6 +434,7 @@ html.dark .he-row:hover {
 .he-row__arrow {
   font-family: ui-monospace, monospace;
   color: var(--he-accent);
+  align-self: center;
   opacity: 0;
   transform: translateX(-6px);
   transition: opacity 0.3s, transform 0.3s;

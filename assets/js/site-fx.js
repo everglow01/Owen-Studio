@@ -97,9 +97,18 @@
   // =========================================================================
   var sfCtx, sfW = 0, sfH = 0, sfStars = [], sfMeteors = [], sfRaf = null, sfRunning = false;
   var sfNextMeteor = 0;
+  var sfNextFlash = 0;
 
-  function sfStarColor(a) {
-    return isDark() ? 'rgba(224,242,254,' + a + ')' : 'rgba(56,120,180,' + a + ')';
+  // Star color by type (dot/glow use cool blue, cross/burst use warm gold to echo --he-spark)
+  function sfStarColor(type, a) {
+    if (type === 'cross' || type === 'burst') {
+      return isDark()
+        ? 'rgba(252,211,77,'  + a + ')'   // amber-300
+        : 'rgba(245,158,11,'  + a + ')';  // amber-500
+    }
+    return isDark()
+      ? 'rgba(224,242,254,' + a + ')'     // sky-100
+      : 'rgba(15,76,129,'   + a + ')';    // deep navy (high contrast on light bg)
   }
   function sfResize() {
     sfW = window.innerWidth; sfH = window.innerHeight;
@@ -109,21 +118,97 @@
     starCanvas.style.height = sfH + 'px';
     sfCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
   }
+  function sfPickStarType() {
+    var r = Math.random();
+    if (r < 0.05) return 'burst';   // 5-pt star,  5%
+    if (r < 0.18) return 'cross';   // 4-pt cross, 13%
+    if (r < 0.40) return 'glow';    // halo dot,   22%
+    return 'dot';                   // plain dot,  60%
+  }
   function sfInitStars() {
     var n = Math.min(150, Math.floor(sfW * sfH / 9000));
     if (n < 70) n = 70;
     sfStars = [];
     for (var i = 0; i < n; i++) {
+      var type = sfPickStarType();
+      var r =
+        type === 'burst' ? 2.5 + Math.random() * 1.5 :
+        type === 'cross' ? 2.0 + Math.random() * 1.2 :
+        type === 'glow'  ? 1.0 + Math.random() * 1.3 :
+                           0.6 + Math.random() * 1.0;
+      // ~15% of plain dots are "stable" (no twinkle, distant background stars)
+      var isStill = type === 'dot' && Math.random() < 0.15;
       sfStars.push({
         x: Math.random() * sfW,
         y: Math.random() * sfH,
-        r: 0.5 + Math.random() * 1.3,
-        base: 0.25 + Math.random() * 0.45,
-        amp:  0.15 + Math.random() * 0.35,
-        speed: 0.4 + Math.random() * 1.2,
-        phase: Math.random() * Math.PI * 2
+        type: type,
+        r: r,
+        base:  isStill ? 0.7  + Math.random() * 0.2  : 0.55 + Math.random() * 0.30,
+        amp:   isStill ? 0    : 0.18 + Math.random() * 0.30,
+        speed: 0.3 + Math.random() * 1.4,
+        phase: Math.random() * Math.PI * 2,
+        flashUntil: 0
       });
     }
+    sfNextFlash = performance.now() + 1500 + Math.random() * 2000;
+  }
+  function sfScheduleFlash(now) {
+    if (!sfStars.length) return;
+    // weighted pick: cross/burst get 3x weight
+    var weights = [], total = 0;
+    for (var i = 0; i < sfStars.length; i++) {
+      var w = (sfStars[i].type === 'cross' || sfStars[i].type === 'burst') ? 3 : 1;
+      total += w; weights.push(total);
+    }
+    var pick = Math.random() * total;
+    for (var j = 0; j < weights.length; j++) {
+      if (pick <= weights[j]) { sfStars[j].flashUntil = now + 600; break; }
+    }
+  }
+  function sfDrawDot(x, y, r, color) {
+    sfCtx.fillStyle = color;
+    sfCtx.beginPath();
+    sfCtx.arc(x, y, r, 0, Math.PI * 2);
+    sfCtx.fill();
+  }
+  function sfDrawGlow(x, y, r, type, a) {
+    var center = sfStarColor(type, a);
+    var edge   = sfStarColor(type, 0);
+    var R = r * 2.6;
+    var grad = sfCtx.createRadialGradient(x, y, 0, x, y, R);
+    grad.addColorStop(0, center);
+    grad.addColorStop(0.5, sfStarColor(type, a * 0.35));
+    grad.addColorStop(1, edge);
+    sfCtx.fillStyle = grad;
+    sfCtx.beginPath();
+    sfCtx.arc(x, y, R, 0, Math.PI * 2);
+    sfCtx.fill();
+    // bright pinpoint center
+    sfDrawDot(x, y, r * 0.55, sfStarColor(type, Math.min(1, a * 1.2)));
+  }
+  function sfDrawCross(x, y, size, color) {
+    sfCtx.strokeStyle = color;
+    sfCtx.lineWidth = 0.9;
+    sfCtx.lineCap = 'round';
+    sfCtx.beginPath();
+    sfCtx.moveTo(x - size, y); sfCtx.lineTo(x + size, y);
+    sfCtx.moveTo(x, y - size); sfCtx.lineTo(x, y + size);
+    sfCtx.stroke();
+    // tiny bright center
+    sfDrawDot(x, y, 0.7, color);
+  }
+  function sfDrawBurst(x, y, size, color) {
+    sfCtx.fillStyle = color;
+    sfCtx.beginPath();
+    for (var i = 0; i < 5; i++) {
+      var outer = -Math.PI / 2 + i * (Math.PI * 2 / 5);
+      var inner = outer + Math.PI / 5;
+      if (i === 0) sfCtx.moveTo(x + Math.cos(outer) * size, y + Math.sin(outer) * size);
+      else         sfCtx.lineTo(x + Math.cos(outer) * size, y + Math.sin(outer) * size);
+      sfCtx.lineTo(x + Math.cos(inner) * size * 0.42, y + Math.sin(inner) * size * 0.42);
+    }
+    sfCtx.closePath();
+    sfCtx.fill();
   }
   function sfSpawnMeteor() {
     var startX = sfW * (0.55 + Math.random() * 0.45);
@@ -179,14 +264,26 @@
 
     sfCtx.clearRect(0, 0, sfW, sfH);
 
+    // sparkle scheduler — pick a star to flash
+    if (now >= sfNextFlash) {
+      sfScheduleFlash(now);
+      sfNextFlash = now + 1500 + Math.random() * 2000; // every 1.5-3.5s
+    }
+
     for (var i = 0; i < sfStars.length; i++) {
       var s = sfStars[i];
       var a = s.base + Math.sin(t * s.speed + s.phase) * s.amp;
       if (a < 0.05) a = 0.05;
-      sfCtx.fillStyle = sfStarColor(a);
-      sfCtx.beginPath();
-      sfCtx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-      sfCtx.fill();
+      // flash boost: cosine-ease bump over 600ms window
+      if (now < s.flashUntil) {
+        var p = 1 - (s.flashUntil - now) / 600; // 0 -> 1
+        var ease = 0.5 - 0.5 * Math.cos(p * Math.PI * 2); // 0 -> 1 -> 0
+        a = Math.min(1, a + ease * 1.0);
+      }
+      if (s.type === 'cross')      sfDrawCross(s.x, s.y, s.r, sfStarColor(s.type, a));
+      else if (s.type === 'burst') sfDrawBurst(s.x, s.y, s.r, sfStarColor(s.type, a));
+      else if (s.type === 'glow')  sfDrawGlow(s.x, s.y, s.r, s.type, a);
+      else                         sfDrawDot(s.x, s.y, s.r, sfStarColor(s.type, a));
     }
 
     if (now >= sfNextMeteor) {

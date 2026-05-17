@@ -36,6 +36,8 @@
       <section class="he-section he-latest">
         <ol class="he-list">
           {{ range $i, $p := $pages }}
+            {{ $desc := $p.Description }}
+            {{ if not $desc }}{{ $desc = $p.Summary | plainify | truncate 120 }}{{ end }}
             <li class="he-list__item">
               <a href="{{ $p.RelPermalink }}" class="he-row">
                 <span class="he-row__idx">{{ printf "%02d" (add $i 1) }}</span>
@@ -53,7 +55,10 @@
                     <span data-views-path="{{ $p.RelPermalink }}" class="tabular-nums">…</span>
                   </span>
                 </span>
-                <span class="he-row__title">{{ $p.Title }}</span>
+                <div class="he-row__body">
+                  <span class="he-row__title">{{ $p.Title }}</span>
+                  {{ with $desc }}<p class="he-row__desc">{{ . }}</p>{{ end }}
+                </div>
                 <span class="he-row__arrow" aria-hidden="true">→</span>
               </a>
             </li>
