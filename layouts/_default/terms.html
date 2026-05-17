@@ -1,44 +1,44 @@
 {{ define "main" }}
   {{ .Scratch.Set "scope" "terms" }}
-  {{ $showHero := .Params.showHero | default site.Params.taxonomy.showHero | default false }}
-  {{ if $showHero }}
-    {{ $heroStyle := print "hero/" site.Params.taxonomy.heroStyle ".html" }}
-    {{ if templates.Exists ( printf "partials/%s" $heroStyle ) }}
-      {{ partial $heroStyle . }}
-    {{ else }}
-      {{ partial "hero/basic.html" . }}
-    {{ end }}
-  {{- end -}}
+  {{ $terms := .Pages }}
+  {{ $eyebrowLabel := i18n .Type | default .Type | upper }}
 
-  <header class="mt-5">
-    {{ if .Params.showBreadcrumbs | default (site.Params.taxonomy.showBreadcrumbs | default false) }}
-      {{ partial "breadcrumbs.html" . }}
-    {{ end }}
-    <h1 class="mt-5 text-4xl font-extrabold text-neutral-900 dark:text-neutral">{{ .Title }}</h1>
-    <div class="mt-1 mb-2 text-base text-neutral-500 dark:text-neutral-400 print:hidden">
-      {{ partial "article-meta/taxonomy.html" (dict "context" . "scope" "single") }}
-    </div>
-  </header>
-  {{ if .Content }}
-    <section class="flex flex-col max-w-full mt-0 prose dark:prose-invert lg:flex-row">
-      <div class="min-w-0 min-h-0 max-w-prose">
-        {{ .Content }}
-      </div>
+  <article class="home-editorial w-full">
+
+    {{/* ==================== HERO ==================== */}}
+    <section class="he-page-hero">
+      <p class="he-eyebrow">{{ printf "TAXONOMY · %02d %s" (len $terms) $eyebrowLabel }}</p>
+      <h1 class="he-name he-name--lg">{{ .Title }}</h1>
+      {{ with .Content }}
+        <div class="he-page-hero__desc">{{ . }}</div>
+      {{ end }}
+      <div class="he-rule"></div>
     </section>
-  {{ end }}
 
-  {{/* Override: iterate .Pages so empty terms (with _index.md) are shown too */}}
-  {{ if site.Params.taxonomy.cardView }}
-    <section class="w-full grid gap-4 sm:grid-cols-2 md:grid-cols-3">
-      {{ range .Pages }}
-        {{ partial "term-link/card.html" (dict "Page" . "Count" (len .Pages)) }}
+    <div class="he-divider" role="separator"><span></span><span></span></div>
+
+    {{/* ==================== GRID ==================== */}}
+    <section class="he-tax-grid">
+      {{ range $terms }}
+        <a href="{{ .RelPermalink }}" class="he-tax-card">
+          <span class="he-tax-card__bracket he-tax-card__bracket--tl"></span>
+          <span class="he-tax-card__bracket he-tax-card__bracket--br"></span>
+          <span class="he-tax-card__count">{{ printf "%02d" (len .Pages) }}</span>
+
+          <h2 class="he-tax-card__title">{{ .Title }}</h2>
+          <span class="he-tax-card__rule"></span>
+          {{ with .Description }}
+            <p class="he-tax-card__desc">{{ . }}</p>
+          {{ else }}
+            {{ with .Content }}
+              <p class="he-tax-card__desc">{{ . | plainify | truncate 80 }}</p>
+            {{ end }}
+          {{ end }}
+
+          <span class="he-tax-card__cta" aria-hidden="true">→</span>
+        </a>
       {{ end }}
     </section>
-  {{ else }}
-    <section class="flex flex-wrap max-w-prose -mx-2 overflow-hidden">
-      {{ range .Pages }}
-        {{ partial "term-link/text.html" (dict "Page" . "Count" (len .Pages)) }}
-      {{ end }}
-    </section>
-  {{ end }}
+
+  </article>
 {{ end }}

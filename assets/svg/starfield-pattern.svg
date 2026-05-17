@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <g fill="STAR_COLOR">
+    <circle cx="14"  cy="22"  r="0.8" opacity="0.55"/>
+    <circle cx="38"  cy="9"   r="1.0" opacity="0.45"/>
+    <circle cx="71"  cy="33"  r="0.7" opacity="0.6"/>
+    <circle cx="95"  cy="14"  r="1.2" opacity="0.4"/>
+    <circle cx="124" cy="28"  r="0.7" opacity="0.55"/>
+    <circle cx="156" cy="11"  r="0.9" opacity="0.5"/>
+    <circle cx="183" cy="36"  r="0.7" opacity="0.45"/>
+    <circle cx="22"  cy="58"  r="0.9" opacity="0.5"/>
+    <circle cx="59"  cy="71"  r="0.7" opacity="0.55"/>
+    <circle cx="103" cy="62"  r="1.1" opacity="0.4"/>
+    <circle cx="141" cy="79"  r="0.7" opacity="0.55"/>
+    <circle cx="172" cy="65"  r="0.8" opacity="0.45"/>
+    <circle cx="8"   cy="98"  r="0.7" opacity="0.5"/>
+    <circle cx="46"  cy="112" r="1.0" opacity="0.45"/>
+    <circle cx="86"  cy="102" r="0.7" opacity="0.55"/>
+    <circle cx="118" cy="126" r="0.8" opacity="0.45"/>
+    <circle cx="158" cy="113" r="0.7" opacity="0.55"/>
+    <circle cx="190" cy="100" r="0.9" opacity="0.4"/>
+    <circle cx="28"  cy="142" r="0.7" opacity="0.55"/>
+    <circle cx="68"  cy="156" r="1.0" opacity="0.4"/>
+    <circle cx="112" cy="148" r="0.7" opacity="0.55"/>
+    <circle cx="146" cy="167" r="0.8" opacity="0.45"/>
+    <circle cx="178" cy="148" r="0.7" opacity="0.5"/>
+    <circle cx="16"  cy="184" r="0.9" opacity="0.45"/>
+    <circle cx="55"  cy="190" r="0.7" opacity="0.55"/>
+    <circle cx="96"  cy="180" r="1.1" opacity="0.4"/>
+    <circle cx="135" cy="195" r="0.7" opacity="0.5"/>
+    <circle cx="168" cy="186" r="0.8" opacity="0.45"/>
+  </g>
+</svg>

@@ -1,0 +1,64 @@
+{{ define "main" }}
+  {{ .Scratch.Set "scope" "list" }}
+  {{ $pages := where .Site.RegularPages "Type" "in" .Site.Params.mainSections }}
+  {{ $count := len $pages }}
+
+  <article class="home-editorial w-full">
+
+    {{/* ==================== HERO ==================== */}}
+    <section class="he-page-hero">
+      <p class="he-eyebrow">{{ printf "ARTICLES · %02d ENTRIES" $count }}</p>
+      <h1 class="he-name he-name--lg">{{ .Title | default "全部文章" }}</h1>
+      {{ with .Content }}
+        <div class="he-page-hero__desc">{{ . }}</div>
+      {{ end }}
+      <div class="he-rule"></div>
+    </section>
+
+    <div class="he-divider" role="separator"><span></span><span></span></div>
+
+    {{/* ==================== LIST (grouped by year) ==================== */}}
+    {{ if gt $count 0 }}
+      <section class="he-section he-latest">
+        {{ range $pages.GroupByDate "2006" }}
+          <div class="he-year-group">
+            <header class="he-year-group__head">
+              <span class="he-year-group__num">{{ .Key }}</span>
+              <span class="he-year-group__rule"></span>
+            </header>
+            <ol class="he-list">
+              {{ range $i, $p := .Pages }}
+                <li class="he-list__item">
+                  <a href="{{ $p.RelPermalink }}" class="he-row">
+                    <span class="he-row__idx">{{ printf "%02d" (add $i 1) }}</span>
+                    <span class="he-row__meta">
+                      <time datetime="{{ $p.Date.Format "2006-01-02" }}">{{ $p.Date.Format ($.Site.Params.dateFormat | default "2006-01-02") }}</time>
+                      {{ with ($p.Params.categories) }}
+                        <span class="he-row__dot">·</span>
+                        <span class="he-row__cat">{{ index . 0 }}</span>
+                      {{ end }}
+                      <span class="he-row__views">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                          <path d="M1 12 C 4 6, 9 4, 12 4 C 15 4, 20 6, 23 12 C 20 18, 15 20, 12 20 C 9 20, 4 18, 1 12 Z"/>
+                          <circle cx="12" cy="12" r="3.2"/>
+                        </svg>
+                        <span data-views-path="{{ $p.RelPermalink }}" class="tabular-nums">…</span>
+                      </span>
+                    </span>
+                    <span class="he-row__title">{{ $p.Title }}</span>
+                    <span class="he-row__arrow" aria-hidden="true">→</span>
+                  </a>
+                </li>
+              {{ end }}
+            </ol>
+          </div>
+        {{ end }}
+      </section>
+    {{ else }}
+      <section class="he-section">
+        <p class="he-page-hero__desc"><em>暂无文章</em></p>
+      </section>
+    {{ end }}
+
+  </article>
+{{ end }}

@@ -110,6 +110,8 @@ html.dark .highlight-wrapper.has-header > .copy-button:active {
   --he-line-soft: rgba(14, 165, 233, 0.22);
   --he-accent: #0ea5e9;
   --he-muted: rgba(15, 23, 42, 0.55);
+  --he-spark: #f59e0b;
+  --he-spark-soft: rgba(245, 158, 11, 0.4);
 }
 html.dark {
   --he-ink: #e0f2fe;
@@ -117,6 +119,8 @@ html.dark {
   --he-line-soft: rgba(56, 189, 248, 0.22);
   --he-accent: #38bdf8;
   --he-muted: rgba(226, 232, 240, 0.55);
+  --he-spark: #fbbf24;
+  --he-spark-soft: rgba(251, 191, 36, 0.45);
 }
 
 .home-editorial {
@@ -508,10 +512,231 @@ body:not([data-bg-mode]) #homepage-blowfish {
 /* Reduced motion: kill all homepage animations */
 @media (prefers-reduced-motion: reduce) {
   #homepage-particles,
-  #homepage-blowfish { display: none !important; }
+  #homepage-blowfish,
+  #starfield-canvas,
+  #amber-spark { display: none !important; }
   .he-geom { animation: none !important; }
   .he-row__title::after,
   .he-row__arrow,
   .he-more__btn,
-  .he-more__arrow { transition: none !important; }
+  .he-more__arrow,
+  .he-tax-card,
+  .he-tax-card__cta { transition: none !important; }
 }
+
+/* ============================================================
+   子页面：编辑级 hero band（terms / term / posts list 共用）
+   ============================================================ */
+
+.he-name--lg {
+  font-size: clamp(2.2rem, 5.5vw, 3.6rem);
+}
+
+.he-page-hero {
+  padding: 3rem 0 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+@media (max-width: 768px) {
+  .he-page-hero { padding: 1.5rem 0 1rem; }
+}
+.he-page-hero__desc {
+  font-family: 'Fraunces', 'Source Han Serif SC', serif;
+  font-style: italic;
+  color: var(--he-muted);
+  font-size: 1.1rem;
+  max-width: 60ch;
+  margin-top: 0.4rem;
+}
+.he-page-hero__desc p { margin: 0 0 0.5rem; }
+.he-page-hero__meta {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.78rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--he-muted);
+  margin: 0.8rem 0 0;
+}
+.he-page-hero__dot { color: var(--he-line); }
+
+/* ============================================================
+   分类/标签 索引卡片网格
+   ============================================================ */
+
+.he-tax-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1.4rem;
+  padding: 1rem 0 2rem;
+}
+
+.he-tax-card {
+  position: relative;
+  display: block;
+  padding: 2rem 1.6rem 1.8rem;
+  min-height: 180px;
+  text-decoration: none;
+  color: var(--he-ink);
+  background: transparent;
+  border: 1px solid var(--he-line-soft);
+  border-radius: 0;
+  transition: transform 0.28s ease, border-color 0.28s ease, background-color 0.28s ease;
+  overflow: hidden;
+}
+.he-tax-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--he-spark-soft);
+  background-color: rgba(245, 158, 11, 0.04);
+}
+html.dark .he-tax-card:hover {
+  background-color: rgba(251, 191, 36, 0.06);
+}
+
+.he-tax-card__bracket {
+  position: absolute;
+  width: 12px; height: 12px;
+  border-color: var(--he-accent);
+  border-style: solid;
+  border-width: 0;
+  transition: border-color 0.28s ease;
+}
+.he-tax-card__bracket--tl { top: 10px; left: 10px; border-top-width: 1.5px; border-left-width: 1.5px; }
+.he-tax-card__bracket--br { bottom: 10px; right: 10px; border-bottom-width: 1.5px; border-right-width: 1.5px; }
+.he-tax-card:hover .he-tax-card__bracket { border-color: var(--he-spark); }
+
+.he-tax-card__count {
+  position: absolute;
+  top: 1rem;
+  right: 1.2rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.78rem;
+  letter-spacing: 0.18em;
+  color: var(--he-spark);
+  transition: color 0.28s ease;
+}
+
+.he-tax-card__title {
+  font-family: 'Fraunces', 'Source Han Serif SC', 'Noto Serif CJK SC', serif;
+  font-weight: 600;
+  font-size: 1.55rem;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  margin: 0 0 0.5rem;
+}
+
+.he-tax-card__rule {
+  display: block;
+  width: 32px;
+  height: 1px;
+  background: var(--he-accent);
+  margin: 0.4rem 0 0.9rem;
+  transition: width 0.32s ease, background-color 0.28s ease;
+}
+.he-tax-card:hover .he-tax-card__rule {
+  width: 56px;
+  background: var(--he-spark);
+}
+
+.he-tax-card__desc {
+  margin: 0;
+  color: var(--he-muted);
+  font-size: 0.95rem;
+  line-height: 1.55;
+  font-family: 'Fraunces', 'Source Han Serif SC', serif;
+}
+
+.he-tax-card__cta {
+  position: absolute;
+  bottom: 1rem;
+  right: 1.4rem;
+  font-family: ui-monospace, monospace;
+  color: var(--he-spark);
+  opacity: 0;
+  transform: translateX(-6px);
+  transition: opacity 0.28s ease, transform 0.28s ease;
+}
+.he-tax-card:hover .he-tax-card__cta {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* ============================================================
+   posts list — 年份分组样式
+   ============================================================ */
+
+.he-year-group { margin-bottom: 2.4rem; }
+.he-year-group__head {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-bottom: 0.6rem;
+}
+.he-year-group__num {
+  font-family: ui-monospace, monospace;
+  font-size: 0.95rem;
+  letter-spacing: 0.22em;
+  color: var(--he-spark);
+  font-weight: 600;
+}
+.he-year-group__rule {
+  flex: 1;
+  height: 1px;
+  background: var(--he-line);
+}
+
+/* ============================================================
+   星空 + 流星 背景层（子页面）
+   ============================================================ */
+
+#starfield-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: -1;
+  opacity: 1;
+  transition: opacity 0.4s ease;
+}
+
+#amber-spark {
+  position: fixed;
+  right: 8vw;
+  bottom: 14vh;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--he-spark);
+  box-shadow:
+    0 0 6px var(--he-spark),
+    0 0 16px var(--he-spark-soft),
+    0 0 32px var(--he-spark-soft);
+  pointer-events: none;
+  z-index: -1;
+  animation: he-spark-pulse 3.6s ease-in-out infinite;
+  transition: opacity 0.4s ease;
+}
+html.dark #amber-spark {
+  box-shadow:
+    0 0 8px var(--he-spark),
+    0 0 22px var(--he-spark-soft),
+    0 0 44px var(--he-spark-soft);
+}
+@keyframes he-spark-pulse {
+  0%, 100% { transform: scale(0.85); opacity: 0.7; }
+  50%      { transform: scale(1.15); opacity: 1.0; }
+}
+
+/* hide starfield + spark when user picked static, or before JS boot */
+body[data-bg-mode="static"] #starfield-canvas,
+body[data-bg-mode="static"] #amber-spark,
+body:not([data-bg-mode]) #starfield-canvas,
+body:not([data-bg-mode]) #amber-spark {
+  opacity: 0 !important;
+  animation-play-state: paused;
+}
+
