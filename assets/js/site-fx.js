@@ -133,7 +133,7 @@
       var type = sfPickStarType();
       var r =
         type === 'burst' ? 4.0 + Math.random() * 2.5 :
-        type === 'cross' ? 3.2 + Math.random() * 1.8 :
+        type === 'cross' ? 6.4 + Math.random() * 3.6 :
         type === 'glow'  ? 1.6 + Math.random() * 1.6 :
                            0.8 + Math.random() * 1.4;
       // ~15% of plain dots are "stable" (no twinkle, distant background stars)
@@ -187,15 +187,20 @@
     sfDrawDot(x, y, r * 0.55, sfStarColor(type, Math.min(1, a * 1.2)));
   }
   function sfDrawCross(x, y, size, color) {
-    sfCtx.strokeStyle = color;
-    sfCtx.lineWidth = 0.9;
-    sfCtx.lineCap = 'round';
+    sfCtx.fillStyle = color;
+    var inner = size * 0.22;
+    var diag  = inner * 0.707;
     sfCtx.beginPath();
-    sfCtx.moveTo(x - size, y); sfCtx.lineTo(x + size, y);
-    sfCtx.moveTo(x, y - size); sfCtx.lineTo(x, y + size);
-    sfCtx.stroke();
-    // tiny bright center
-    sfDrawDot(x, y, 0.7, color);
+    sfCtx.moveTo(x,         y - size);
+    sfCtx.lineTo(x + diag,  y - diag);
+    sfCtx.lineTo(x + size,  y);
+    sfCtx.lineTo(x + diag,  y + diag);
+    sfCtx.lineTo(x,         y + size);
+    sfCtx.lineTo(x - diag,  y + diag);
+    sfCtx.lineTo(x - size,  y);
+    sfCtx.lineTo(x - diag,  y - diag);
+    sfCtx.closePath();
+    sfCtx.fill();
   }
   function sfDrawBurst(x, y, size, color) {
     sfCtx.fillStyle = color;
@@ -226,14 +231,14 @@
       ? a0 + Math.random() * (a1 + 360 - a0)  // wraps through 360°
       : a0 + Math.random() * (a1 - a0);
     var angle = (deg % 360) * Math.PI / 180;
-    var speed = 580 + Math.random() * 260;
+    var speed = 700 + Math.random() * 280;
     sfMeteors.push({
       x: sx, y: sy,
       vx: Math.cos(angle) * speed,
       vy: Math.sin(angle) * speed,
       life: 0,
-      max: 1.4 + Math.random() * 0.5,
-      trail: 90 + Math.random() * 70
+      max: 1.7 + Math.random() * 0.6,
+      trail: 180 + Math.random() * 140
     });
     if (sfMeteors.length > 4) sfMeteors.shift();
   }
@@ -243,26 +248,28 @@
     var tailX = headX - (m.vx / mag) * m.trail;
     var tailY = headY - (m.vy / mag) * m.trail;
     var t = m.life / m.max;
-    var alpha = t < 0.2 ? t / 0.2 : (1 - (t - 0.2) / 0.8);
+    var alpha = t < 0.18 ? t / 0.18 : (1 - (t - 0.18) / 0.82);
     if (alpha < 0) alpha = 0;
     var grad = sfCtx.createLinearGradient(tailX, tailY, headX, headY);
-    grad.addColorStop(0,    'rgba(255,220,180,0)');
-    grad.addColorStop(0.45, 'rgba(120,180,230,' + (alpha * 0.45) + ')');
-    grad.addColorStop(1,    'rgba(255,220,180,' + (alpha * 0.95) + ')');
+    grad.addColorStop(0,    'rgba(255,235,210,0)');
+    grad.addColorStop(0.35, 'rgba(150,200,240,' + (alpha * 0.55) + ')');
+    grad.addColorStop(0.85, 'rgba(255,240,210,' + (alpha * 0.95) + ')');
+    grad.addColorStop(1,    'rgba(255,255,255,' + alpha + ')');
     sfCtx.strokeStyle = grad;
-    sfCtx.lineWidth = 1.4;
+    sfCtx.lineWidth = 2.0;
     sfCtx.lineCap = 'round';
     sfCtx.beginPath();
     sfCtx.moveTo(tailX, tailY);
     sfCtx.lineTo(headX, headY);
     sfCtx.stroke();
-    var glow = sfCtx.createRadialGradient(headX, headY, 0, headX, headY, 10);
-    glow.addColorStop(0,   'rgba(255,255,255,' + (alpha * 0.95) + ')');
-    glow.addColorStop(0.4, 'rgba(255,220,180,' + (alpha * 0.7) + ')');
+    // 头部白热光晕（更大 + 双层）
+    var glow = sfCtx.createRadialGradient(headX, headY, 0, headX, headY, 18);
+    glow.addColorStop(0,   'rgba(255,255,255,' + alpha + ')');
+    glow.addColorStop(0.3, 'rgba(255,240,210,' + (alpha * 0.85) + ')');
     glow.addColorStop(1,   'rgba(255,220,180,0)');
     sfCtx.fillStyle = glow;
     sfCtx.beginPath();
-    sfCtx.arc(headX, headY, 10, 0, Math.PI * 2);
+    sfCtx.arc(headX, headY, 18, 0, Math.PI * 2);
     sfCtx.fill();
   }
   function sfDraw() {
