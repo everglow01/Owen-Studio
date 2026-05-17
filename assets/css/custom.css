@@ -351,10 +351,6 @@ html.dark {
   transition: padding-left 0.3s ease, background-color 0.3s ease;
   position: relative;
 }
-@media (max-width: 768px) {
-  .he-row { grid-template-columns: 28px 1fr 22px; gap: 0.6rem; }
-  .he-row__meta { display: none; }
-}
 .he-row:hover {
   padding-left: 1.2rem;
   background-color: rgba(14, 165, 233, 0.04);
@@ -377,6 +373,10 @@ html.dark .he-row:hover {
   align-items: center;
   gap: 0.5rem;
   white-space: nowrap;
+}
+@media (max-width: 768px) {
+  .he-row { grid-template-columns: 28px 1fr 22px; gap: 0.6rem; }
+  .he-row__meta { display: none; }
 }
 .he-row__dot { opacity: 0.5; }
 .he-row__cat { color: var(--he-accent); }
