@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 200" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+  <!-- body (slightly puffy ellipse) -->
+  <path d="M70 100 C 70 60, 130 50, 165 60 C 198 70, 200 130, 165 140 C 130 150, 70 140, 70 100 Z" />
+  <!-- belly inner curve -->
+  <path d="M88 110 C 110 130, 150 130, 175 115" stroke-opacity="0.55" />
+  <!-- tail fin -->
+  <path d="M200 70 L 230 50 L 222 100 L 230 150 L 200 130" />
+  <path d="M215 80 L 215 120" stroke-opacity="0.55" />
+  <!-- top fin -->
+  <path d="M125 55 Q 130 30, 150 35 Q 145 50, 140 58" />
+  <!-- bottom fin -->
+  <path d="M120 145 Q 125 170, 145 165 Q 142 152, 138 145" />
+  <!-- pectoral fin (small) -->
+  <path d="M110 105 Q 95 120, 105 130 Q 115 122, 118 115" stroke-opacity="0.7" />
+  <!-- eye -->
+  <circle cx="98" cy="92" r="3.2" fill="currentColor" stroke="none" />
+  <circle cx="98" cy="92" r="6" stroke-opacity="0.6" />
+  <!-- mouth -->
+  <path d="M72 108 Q 65 112, 70 118" stroke-opacity="0.7" />
+  <!-- spikes (the blowfish puff!) -->
+  <path d="M95 65 L 92 55" stroke-opacity="0.6" />
+  <path d="M115 56 L 113 45" stroke-opacity="0.6" />
+  <path d="M140 56 L 140 45" stroke-opacity="0.6" />
+  <path d="M165 60 L 168 49" stroke-opacity="0.6" />
+  <path d="M180 70 L 188 62" stroke-opacity="0.6" />
+  <path d="M188 90 L 200 88" stroke-opacity="0.6" />
+  <path d="M188 110 L 200 112" stroke-opacity="0.6" />
+  <path d="M180 130 L 188 138" stroke-opacity="0.6" />
+  <path d="M165 140 L 168 151" stroke-opacity="0.6" />
+  <path d="M140 144 L 140 155" stroke-opacity="0.6" />
+  <path d="M115 144 L 113 155" stroke-opacity="0.6" />
+  <path d="M95 135 L 92 145" stroke-opacity="0.6" />
+  <path d="M82 122 L 72 128" stroke-opacity="0.6" />
+  <path d="M82 78 L 72 72" stroke-opacity="0.6" />
+  <!-- decorative dots on body -->
+  <circle cx="130" cy="95" r="1.4" fill="currentColor" stroke="none" opacity="0.55" />
+  <circle cx="150" cy="105" r="1.4" fill="currentColor" stroke="none" opacity="0.55" />
+  <circle cx="170" cy="98" r="1.4" fill="currentColor" stroke="none" opacity="0.55" />
+  <circle cx="140" cy="118" r="1.4" fill="currentColor" stroke="none" opacity="0.55" />
+</svg>

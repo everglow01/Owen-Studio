@@ -1,0 +1,137 @@
+{{ $disableImageOptimization := .Site.Params.disableImageOptimization | default false }}
+{{ $author := .Site.Params.Author }}
+{{ $recentItems := .Site.Params.homepage.showRecentItems | default 5 }}
+
+<article class="home-editorial w-full">
+
+  {{/* ==================== HERO ==================== */}}
+  <section class="he-hero">
+    <div class="he-hero__left">
+      {{ with $author.image }}
+        {{ $authorImage := "" }}
+        {{ if or (strings.HasPrefix . "http:") (strings.HasPrefix . "https:") }}
+          {{ $authorImage = resources.GetRemote . }}
+        {{ else }}
+          {{ $authorImage = resources.Get . }}
+        {{ end }}
+        {{ if $authorImage }}
+          {{ $final := $authorImage }}
+          {{ if not (or $disableImageOptimization (eq $authorImage.MediaType.SubType "svg")) }}
+            {{ $final = $authorImage.Fill (print "288x288 q" ($author.imagequality | default "96")) }}
+          {{ end }}
+          <div class="he-avatar">
+            <span class="he-avatar__bracket he-avatar__bracket--tl"></span>
+            <span class="he-avatar__bracket he-avatar__bracket--tr"></span>
+            <span class="he-avatar__bracket he-avatar__bracket--bl"></span>
+            <span class="he-avatar__bracket he-avatar__bracket--br"></span>
+            <span class="he-avatar__ring"></span>
+            <img
+              src="{{ $final.RelPermalink }}"
+              alt="{{ $author.name | default `Author` }}"
+              width="144" height="144"
+              class="he-avatar__img" />
+          </div>
+        {{ end }}
+      {{ end }}
+
+      <div class="he-id">
+        <p class="he-eyebrow">A blog by</p>
+        <h1 class="he-name">{{ $author.name | default .Site.Title }}</h1>
+        {{ with $author.headline }}
+          <p class="he-headline">{{ . | markdownify }}</p>
+        {{ end }}
+        <div class="he-rule"></div>
+        <div class="he-links">
+          {{ partialCached "author-links.html" . }}
+        </div>
+      </div>
+    </div>
+
+    <div class="he-hero__right" aria-hidden="true">
+      {{/* Decorative line-art geometry */}}
+      <svg class="he-geom" viewBox="0 0 320 320" fill="none" stroke="currentColor" stroke-width="0.9" stroke-linecap="round">
+        <circle cx="160" cy="160" r="150" stroke-opacity="0.5" />
+        <circle cx="160" cy="160" r="118" stroke-opacity="0.4" />
+        <circle cx="160" cy="160" r="86"  stroke-opacity="0.32" />
+        <circle cx="160" cy="160" r="54"  stroke-opacity="0.24" />
+        <circle cx="160" cy="160" r="22"  stroke-opacity="0.5" />
+        <line x1="0" y1="160" x2="320" y2="160" stroke-opacity="0.18" stroke-dasharray="2 6" />
+        <line x1="160" y1="0" x2="160" y2="320" stroke-opacity="0.18" stroke-dasharray="2 6" />
+        <line x1="10" y1="10" x2="310" y2="310" stroke-opacity="0.14" />
+        <line x1="310" y1="10" x2="10" y2="310" stroke-opacity="0.14" />
+        <text x="160" y="20" text-anchor="middle" font-size="8" fill="currentColor" stroke="none" opacity="0.45" font-family="ui-monospace, monospace">N</text>
+        <text x="160" y="308" text-anchor="middle" font-size="8" fill="currentColor" stroke="none" opacity="0.45" font-family="ui-monospace, monospace">S</text>
+        <text x="6" y="164" font-size="8" fill="currentColor" stroke="none" opacity="0.45" font-family="ui-monospace, monospace">W</text>
+        <text x="306" y="164" font-size="8" fill="currentColor" stroke="none" opacity="0.45" font-family="ui-monospace, monospace">E</text>
+      </svg>
+      <div class="he-meta">
+        <span class="he-meta__line"></span>
+        <span class="he-meta__txt">Vision · Geometry · Learning</span>
+      </div>
+    </div>
+  </section>
+
+  <div class="he-divider" role="separator"><span></span><span></span></div>
+
+  {{/* ==================== ABOUT ==================== */}}
+  {{ with $author.bio }}
+    <section class="he-section he-about">
+      <header class="he-section__head">
+        <span class="he-label">ABOUT</span>
+      </header>
+      <div class="he-about__body">
+        <p>{{ . | markdownify }}</p>
+        {{ with $.Content }}<div class="he-about__extra">{{ . }}</div>{{ end }}
+      </div>
+    </section>
+  {{ end }}
+
+  <div class="he-divider" role="separator"><span></span><span></span></div>
+
+  {{/* ==================== LATEST ==================== */}}
+  {{ if .Site.Params.homepage.showRecent | default false }}
+    <section class="he-section he-latest">
+      <header class="he-section__head">
+        <span class="he-label">LATEST</span>
+        <span class="he-section__rule"></span>
+      </header>
+
+      <ol class="he-list">
+        {{ $pages := where .Site.RegularPages "Type" "in" .Site.Params.mainSections }}
+        {{ range $i, $p := first $recentItems $pages }}
+          <li class="he-list__item">
+            <a href="{{ $p.RelPermalink }}" class="he-row">
+              <span class="he-row__idx">{{ printf "%02d" (add $i 1) }}</span>
+              <span class="he-row__meta">
+                <time datetime="{{ $p.Date.Format "2006-01-02" }}">{{ $p.Date.Format ($.Site.Params.dateFormat | default "2006-01-02") }}</time>
+                {{ with ($p.Params.categories) }}
+                  <span class="he-row__dot">·</span>
+                  <span class="he-row__cat">{{ index . 0 }}</span>
+                {{ end }}
+                <span class="he-row__views">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M1 12 C 4 6, 9 4, 12 4 C 15 4, 20 6, 23 12 C 20 18, 15 20, 12 20 C 9 20, 4 18, 1 12 Z"/>
+                    <circle cx="12" cy="12" r="3.2"/>
+                  </svg>
+                  <span data-views-path="{{ $p.RelPermalink }}" class="tabular-nums">…</span>
+                </span>
+              </span>
+              <span class="he-row__title">{{ $p.Title }}</span>
+              <span class="he-row__arrow" aria-hidden="true">→</span>
+            </a>
+          </li>
+        {{ end }}
+      </ol>
+
+      {{ if .Site.Params.homepage.showMoreLink | default false }}
+        <div class="he-more">
+          <a href="{{ (.Site.Params.homepage.showMoreLinkDest | default "posts/") | relLangURL }}" class="he-more__btn">
+            <span>{{ i18n "recent.show_more" | default "查看全部" | markdownify }}</span>
+            <span class="he-more__arrow">→</span>
+          </a>
+        </div>
+      {{ end }}
+    </section>
+  {{ end }}
+
+</article>
