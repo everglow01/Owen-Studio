@@ -13,6 +13,10 @@
         <div class="he-page-hero__desc">{{ . }}</div>
       {{ end }}
       <div class="he-rule"></div>
+      <p class="he-darkmode-hint">
+        <span class="he-darkmode-hint__moon">☾</span>
+        <span>试试关灯，星河更明</span>
+      </p>
     </section>
 
     <div class="he-divider" role="separator"><span></span><span></span></div>
@@ -23,7 +27,10 @@
         <a href="{{ .RelPermalink }}" class="he-tax-card">
           <span class="he-tax-card__bracket he-tax-card__bracket--tl"></span>
           <span class="he-tax-card__bracket he-tax-card__bracket--br"></span>
-          <span class="he-tax-card__count">{{ printf "%02d" (len .Pages) }}</span>
+          <span class="he-tax-card__count">
+            <span class="he-tax-card__count__num">{{ printf "%02d" (len .Pages) }}</span>
+            <span class="he-tax-card__count__lbl">POSTS</span>
+          </span>
 
           <h2 class="he-tax-card__title">{{ .Title }}</h2>
           <span class="he-tax-card__rule"></span>

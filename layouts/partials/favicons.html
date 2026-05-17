@@ -1,0 +1,8 @@
+{{ with resources.Get "img/touxiang.png" }}
+  {{ $ico32 := (.Resize "32x32 png").RelPermalink }}
+  {{ $ico16 := (.Resize "16x16 png").RelPermalink }}
+  {{ $apple := (.Resize "180x180 png").RelPermalink }}
+  <link rel="icon" type="image/png" sizes="32x32" href="{{ $ico32 }}">
+  <link rel="icon" type="image/png" sizes="16x16" href="{{ $ico16 }}">
+  <link rel="apple-touch-icon" sizes="180x180" href="{{ $apple }}">
+{{ end }}

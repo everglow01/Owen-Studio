@@ -120,10 +120,10 @@
   }
   function sfPickStarType() {
     var r = Math.random();
-    if (r < 0.05) return 'burst';   // 5-pt star,  5%
-    if (r < 0.18) return 'cross';   // 4-pt cross, 13%
-    if (r < 0.40) return 'glow';    // halo dot,   22%
-    return 'dot';                   // plain dot,  60%
+    if (r < 0.06) return 'burst';   // 5-pt star,  6%
+    if (r < 0.20) return 'cross';   // 4-pt cross, 14%
+    if (r < 0.65) return 'glow';    // halo dot,   45%
+    return 'dot';                   // plain dot,  35%
   }
   function sfInitStars() {
     var n = Math.min(150, Math.floor(sfW * sfH / 9000));
@@ -132,10 +132,10 @@
     for (var i = 0; i < n; i++) {
       var type = sfPickStarType();
       var r =
-        type === 'burst' ? 2.5 + Math.random() * 1.5 :
-        type === 'cross' ? 2.0 + Math.random() * 1.2 :
-        type === 'glow'  ? 1.0 + Math.random() * 1.3 :
-                           0.6 + Math.random() * 1.0;
+        type === 'burst' ? 4.0 + Math.random() * 2.5 :
+        type === 'cross' ? 3.2 + Math.random() * 1.8 :
+        type === 'glow'  ? 1.6 + Math.random() * 1.6 :
+                           0.8 + Math.random() * 1.4;
       // ~15% of plain dots are "stable" (no twinkle, distant background stars)
       var isStill = type === 'dot' && Math.random() < 0.15;
       sfStars.push({
@@ -144,8 +144,8 @@
         type: type,
         r: r,
         base:  isStill ? 0.7  + Math.random() * 0.2  : 0.55 + Math.random() * 0.30,
-        amp:   isStill ? 0    : 0.18 + Math.random() * 0.30,
-        speed: 0.3 + Math.random() * 1.4,
+        amp:   isStill ? 0    : 0.30 + Math.random() * 0.35,
+        speed: 0.5 + Math.random() * 1.7,
         phase: Math.random() * Math.PI * 2,
         flashUntil: 0
       });
@@ -210,22 +210,32 @@
     sfCtx.closePath();
     sfCtx.fill();
   }
+  // 4 launch zones — each with its own valid heading range (toward opposite quadrant)
+  var METEOR_ZONES = [
+    { x: [0.55, 1.00], y: [0.00, 0.30], ang: [155, 200] }, // top-right
+    { x: [0.00, 0.45], y: [0.00, 0.30], ang: [340, 25]  }, // top-left (wraps 360)
+    { x: [0.00, 0.10], y: [0.20, 0.60], ang: [350, 30]  }, // left edge (wraps 360)
+    { x: [0.90, 1.00], y: [0.20, 0.60], ang: [150, 195] }  // right edge
+  ];
   function sfSpawnMeteor() {
-    var startX = sfW * (0.55 + Math.random() * 0.45);
-    var startY = sfH * (0.02 + Math.random() * 0.35);
-    var angleDeg = 155 + Math.random() * 20;            // 155-175deg
-    var angle = angleDeg * Math.PI / 180;
-    var speed = 620 + Math.random() * 220;              // px/sec
-    var trailLen = 90 + Math.random() * 60;
+    var z = METEOR_ZONES[Math.floor(Math.random() * METEOR_ZONES.length)];
+    var sx = sfW * (z.x[0] + Math.random() * (z.x[1] - z.x[0]));
+    var sy = sfH * (z.y[0] + Math.random() * (z.y[1] - z.y[0]));
+    var a0 = z.ang[0], a1 = z.ang[1];
+    var deg = a1 < a0
+      ? a0 + Math.random() * (a1 + 360 - a0)  // wraps through 360°
+      : a0 + Math.random() * (a1 - a0);
+    var angle = (deg % 360) * Math.PI / 180;
+    var speed = 580 + Math.random() * 260;
     sfMeteors.push({
-      x: startX, y: startY,
+      x: sx, y: sy,
       vx: Math.cos(angle) * speed,
       vy: Math.sin(angle) * speed,
       life: 0,
-      max: 1.4 + Math.random() * 0.4,
-      trail: trailLen
+      max: 1.4 + Math.random() * 0.5,
+      trail: 90 + Math.random() * 70
     });
-    if (sfMeteors.length > 2) sfMeteors.shift();
+    if (sfMeteors.length > 4) sfMeteors.shift();
   }
   function sfDrawMeteor(m) {
     var headX = m.x, headY = m.y;
@@ -274,21 +284,25 @@
       var s = sfStars[i];
       var a = s.base + Math.sin(t * s.speed + s.phase) * s.amp;
       if (a < 0.05) a = 0.05;
-      // flash boost: cosine-ease bump over 600ms window
+      var rr = s.r;
+      // flash boost: cosine-ease bump over 600ms window (alpha + radius)
       if (now < s.flashUntil) {
         var p = 1 - (s.flashUntil - now) / 600; // 0 -> 1
         var ease = 0.5 - 0.5 * Math.cos(p * Math.PI * 2); // 0 -> 1 -> 0
-        a = Math.min(1, a + ease * 1.0);
+        a = Math.min(1, a + ease * 1.4);
+        rr = s.r * (1 + ease * 0.3);
       }
-      if (s.type === 'cross')      sfDrawCross(s.x, s.y, s.r, sfStarColor(s.type, a));
-      else if (s.type === 'burst') sfDrawBurst(s.x, s.y, s.r, sfStarColor(s.type, a));
-      else if (s.type === 'glow')  sfDrawGlow(s.x, s.y, s.r, s.type, a);
-      else                         sfDrawDot(s.x, s.y, s.r, sfStarColor(s.type, a));
+      if (s.type === 'cross')      sfDrawCross(s.x, s.y, rr, sfStarColor(s.type, a));
+      else if (s.type === 'burst') sfDrawBurst(s.x, s.y, rr, sfStarColor(s.type, a));
+      else if (s.type === 'glow')  sfDrawGlow(s.x, s.y, rr, s.type, a);
+      else                         sfDrawDot(s.x, s.y, rr, sfStarColor(s.type, a));
     }
 
     if (now >= sfNextMeteor) {
-      sfSpawnMeteor();
-      sfNextMeteor = now + (8000 + Math.random() * 4000); // 8-12s
+      var burst = Math.random();
+      var count = burst < 0.10 ? 3 : burst < 0.40 ? 2 : 1; // 10% triple, 30% double
+      for (var bi = 0; bi < count; bi++) sfSpawnMeteor();
+      sfNextMeteor = now + (3000 + Math.random() * 4000);  // 3-7s
     }
 
     for (var j = sfMeteors.length - 1; j >= 0; j--) {

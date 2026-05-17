@@ -210,7 +210,7 @@ html.dark {
 .he-headline {
   font-family: 'Fraunces', 'Source Han Serif SC', serif;
   font-style: italic;
-  font-weight: 300;
+  font-weight: 400;
   font-size: 1.25rem;
   color: var(--he-muted);
   margin: 0.3rem 0 0;
@@ -387,10 +387,10 @@ html.dark .he-row:hover {
 .he-row__desc {
   font-family: 'Fraunces', 'Source Han Serif SC', serif;
   font-style: italic;
-  font-weight: 300;
+  font-weight: 400;
   font-size: 0.92rem;
   line-height: 1.5;
-  color: var(--he-muted);
+  color: rgba(15, 23, 42, 0.72);
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -398,10 +398,11 @@ html.dark .he-row:hover {
   text-overflow: ellipsis;
   margin: 0;
 }
+html.dark .he-row__desc { color: rgba(226, 232, 240, 0.78); }
 .he-row__title {
   font-family: 'Fraunces', 'Source Han Serif SC', serif;
   font-size: 1.18rem;
-  font-weight: 400;
+  font-weight: 500;
   line-height: 1.4;
   position: relative;
   display: inline-block;
@@ -543,6 +544,8 @@ body:not([data-bg-mode]) #homepage-blowfish {
   .he-more__arrow,
   .he-tax-card,
   .he-tax-card__cta { transition: none !important; }
+  #home-moon { animation: none !important; }
+  .he-darkmode-hint { animation: none !important; opacity: 0.85; }
 }
 
 /* ============================================================
@@ -565,11 +568,13 @@ body:not([data-bg-mode]) #homepage-blowfish {
 .he-page-hero__desc {
   font-family: 'Fraunces', 'Source Han Serif SC', serif;
   font-style: italic;
-  color: var(--he-muted);
+  font-weight: 400;
+  color: rgba(15, 23, 42, 0.72);
   font-size: 1.1rem;
   max-width: 60ch;
   margin-top: 0.4rem;
 }
+html.dark .he-page-hero__desc { color: rgba(226, 232, 240, 0.78); }
 .he-page-hero__desc p { margin: 0 0 0.5rem; }
 .he-page-hero__meta {
   display: flex;
@@ -631,13 +636,27 @@ html.dark .he-tax-card:hover {
 
 .he-tax-card__count {
   position: absolute;
-  top: 1rem;
+  top: 0.9rem;
   right: 1.2rem;
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 0.78rem;
-  letter-spacing: 0.18em;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.35rem;
   color: var(--he-spark);
   transition: color 0.28s ease;
+}
+.he-tax-card__count__num {
+  font-family: 'Fraunces', 'Source Han Serif SC', serif;
+  font-size: 1.4rem;
+  font-weight: 600;
+  line-height: 1;
+  font-variation-settings: "opsz" 96;
+}
+.he-tax-card__count__lbl {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.18em;
+  opacity: 0.72;
+  text-transform: uppercase;
 }
 
 .he-tax-card__title {
@@ -760,4 +779,69 @@ body:not([data-bg-mode]) #amber-spark {
   opacity: 0 !important;
   animation-play-state: paused;
 }
+
+/* ============================================================
+   LATEST 大气化：放大字号 + 加间距（作用域 .he-latest）
+   ============================================================ */
+.he-latest .he-row { padding: 1.35rem 0.4rem; }
+.he-latest .he-row__title { font-size: 1.32rem; }
+.he-latest .he-row__desc  { font-size: 0.98rem; line-height: 1.55; }
+.he-latest .he-section__head { font-size: 0.85rem; }
+
+/* ============================================================
+   深色模式诗意提示
+   ============================================================ */
+.he-darkmode-hint {
+  font-family: 'Fraunces', 'Source Han Serif SC', serif;
+  font-style: italic;
+  font-weight: 300;
+  font-size: 0.88rem;
+  color: var(--he-spark);
+  letter-spacing: 0.04em;
+  margin: 0.5rem 0 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  opacity: 0.78;
+  animation: he-hint-glow 4s ease-in-out infinite;
+}
+.he-darkmode-hint__moon {
+  display: inline-block;
+  font-size: 0.95rem;
+  filter: drop-shadow(0 0 6px rgba(245, 158, 11, 0.55));
+}
+@keyframes he-hint-glow {
+  0%, 100% { opacity: 0.65; }
+  50%      { opacity: 1.00; }
+}
+html.dark .he-darkmode-hint { display: none; }
+
+/* ============================================================
+   主页暖色月牙装饰（仅主页）+ 主页 section 标签转暖金
+   ============================================================ */
+#home-moon {
+  position: fixed;
+  top: 14vh;
+  right: 6vw;
+  width: clamp(60px, 7vw, 96px);
+  height: auto;
+  pointer-events: none;
+  z-index: -1;
+  opacity: 0.55;
+  color: var(--he-spark);
+  filter: drop-shadow(0 0 14px rgba(245, 158, 11, 0.35));
+  animation: he-moon-glow 6s ease-in-out infinite;
+  transition: opacity 0.4s ease;
+}
+html.dark #home-moon { opacity: 0.7; }
+@keyframes he-moon-glow {
+  0%, 100% { opacity: 0.45; transform: translateY(0); }
+  50%      { opacity: 0.70; transform: translateY(-4px); }
+}
+body[data-bg-mode="static"] #home-moon,
+body:not([data-bg-mode]) #home-moon { opacity: 0 !important; }
+
+.home-editorial--home .he-section__head { color: var(--he-spark); }
+.home-editorial--home .he-label { color: var(--he-spark); }
+.home-editorial--home .he-row__cat { color: var(--he-spark); }
 

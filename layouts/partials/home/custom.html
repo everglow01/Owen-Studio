@@ -2,7 +2,7 @@
 {{ $author := .Site.Params.Author }}
 {{ $recentItems := .Site.Params.homepage.showRecentItems | default 5 }}
 
-<article class="home-editorial w-full">
+<article class="home-editorial home-editorial--home w-full">
 
   {{/* ==================== HERO ==================== */}}
   <section class="he-hero">
@@ -41,6 +41,10 @@
           <p class="he-headline">{{ . | markdownify }}</p>
         {{ end }}
         <div class="he-rule"></div>
+        <p class="he-darkmode-hint">
+          <span class="he-darkmode-hint__moon">☾</span>
+          <span>试试关灯，星河更明</span>
+        </p>
         <div class="he-links">
           {{ partialCached "author-links.html" . }}
         </div>
@@ -99,6 +103,8 @@
       <ol class="he-list">
         {{ $pages := where .Site.RegularPages "Type" "in" .Site.Params.mainSections }}
         {{ range $i, $p := first $recentItems $pages }}
+          {{ $desc := $p.Description }}
+          {{ if not $desc }}{{ $desc = $p.Summary | plainify | truncate 120 }}{{ end }}
           <li class="he-list__item">
             <a href="{{ $p.RelPermalink }}" class="he-row">
               <span class="he-row__idx">{{ printf "%02d" (add $i 1) }}</span>
@@ -116,7 +122,10 @@
                   <span data-views-path="{{ $p.RelPermalink }}" class="tabular-nums">…</span>
                 </span>
               </span>
-              <span class="he-row__title">{{ $p.Title }}</span>
+              <div class="he-row__body">
+                <span class="he-row__title">{{ $p.Title }}</span>
+                {{ with $desc }}<p class="he-row__desc">{{ . }}</p>{{ end }}
+              </div>
               <span class="he-row__arrow" aria-hidden="true">→</span>
             </a>
           </li>
@@ -135,3 +144,7 @@
   {{ end }}
 
 </article>
+
+<svg id="home-moon" viewBox="0 0 100 100" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <path d="M70 50 a 30 30 0 1 1 -28 -29.85 a 24 24 0 1 0 28 29.85 Z"/>
+</svg>
