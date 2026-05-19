@@ -25,7 +25,7 @@ RF-DETR于2025年11月发表于论文[《RF-DETR: Neural Architecture Search for
 ### 网络结构  
 #### Backbone：DINOv2——自监督预训练ViT    
 DINO的名字来源于  Self-DIstillation with NO labels，其核心思路是“不用label，用蒸馏来预训练”。
-DINOv2 是 Meta AI 2023 年发布的自监督 Vision Transformer 模型（其自身结构几乎与ViT完全一致），从1.42亿张**无标签**图像中学习强大的的视觉特征，拥有极佳的泛用性和鲁棒性，在大部分场景无需微调即可使用。
+DINOv2 是 Meta AI 2023 年发布的自监督 Vision Transformer 模型（结构几乎与 ViT 一致），从 1.42 亿张**无标签**图像里学到了一套泛用性和鲁棒性都很强的视觉特征，大部分下游任务不微调也能直接用。
 > 论文[《DINOv2: Learning Robust Visual Features without Supervision》](https://arxiv.org/abs/2304.07193)    
  
 **为什么要自监督？**    
@@ -44,7 +44,7 @@ DINO/DINOv2 的训练范式叫做**自蒸馏（Self-Distillation）**。蒸馏�
 
 $$\theta_t \leftarrow \lambda \cdot \theta_t + (1 - \lambda) \cdot \theta_s$$   
 
-其中 $\lambda$ 是接近 1 的常数（DINOv2 中通常从 0.994 余弦上升到 1.0）。这样做的好处很直观：Teacher 始终是 Student 的更可靠的版本，输出更平滑，给 Student 提供了一个比自己当前状态更可靠的拟合目标。学生对着老师学习，损失不断下降。   
+其中 $\lambda$ 是接近 1 的常数（DINOv2 中通常从 0.994 余弦上升到 1.0）。这样做的好处很直观：Teacher 始终是 Student 的滑动平均版本，输出更平滑，给 Student 提供了一个比自己当前状态更靠谱的拟合目标。学生对着老师学习，损失不断下降。   
 
 ![Self-Distillation](self-distillation.svg)   
 
@@ -107,7 +107,7 @@ $$\mathcal{L}_{\text{total}} = \mathcal{L}_{\text{DINO}} + \mathcal{L}_{\text{iB
 
 更怪的是，这些 high-norm 的异常 token 几乎全部出现在图像中**信息量最低的背景区域**——比如一面纯色墙、一片天空、一块桌面。本该最“无聊”的地方反而获得了最强的激活。   
 
-Meta AI 在 2023 年的论文[《Vision Transformers Need Registers》](https://arxiv.org/abs/2309.16588)中对此给出了一个非常反直觉的解释：模型在训练过程中，自发地把这些他认为没用的的背景 token 征用成了自己的“草稿纸”——用来存储一些全局性的、与具体位置无关的信息（比如全局上下文摘要、给 CLS 辅助使用的中间量等）。这是 ViT 在没有显式 scratchpad 机制下被迫做出的“自适应涌现”。   
+Meta AI 在 2023 年的论文[《Vision Transformers Need Registers》](https://arxiv.org/abs/2309.16588)中对此给出了一个非常反直觉的解释：模型在训练过程中，自发地把这些它认为没用的背景 token 征用成了自己的“草稿纸”——用来存储一些全局性的、与具体位置无关的信息（比如全局上下文摘要、给 CLS 辅助使用的中间量等）。这是 ViT 在没有显式 scratchpad 机制下被迫做出的“自适应涌现”。   
 
 这个行为对分类任务影响不大（CLS token 该怎样还怎样），但对**密集预测任务（检测、分割、深度估计）就是灾难**：因为 patch token 是直接被下游用作位置特征的，而这些位置的特征已经被模型挪作他用，相当于交付给检测头的地图里，被偷偷塞进了几块不属于地图本身的便签纸。RF-DETR 这种以每个 patch 为基本单元做预测的检测器，恰恰是受此影响最严重的一类。   
 
@@ -229,7 +229,7 @@ RF-DETR 的搜索维度横跨**从输入到输出的整条链路**，可以粗�
 
 Decoder 的 query 数量、层数也在搜索范围之内，但权重影响相对较小。   
 
-值得一提的是backbone不轻易改宽度这条原则。原因前面 DINOv2 一节已经讲过——hidden_dim 和投影头的预训练权重是高度耦合的，改宽度等于把 DINOv2 的 1.42 亿张图“白练了”。所以 RF-DETR 在 backbone 这一侧只敢“变浅”不敢“变窄”：用前 $k$ 层（$k \in \{6, 8, 10, 12\}$）当作 backbone 即可，权重直接复用 DINOv2 的对应层。   
+backbone 不轻易改宽度这一条单独说一下。原因前面 DINOv2 一节已经讲过——hidden_dim 和投影头的预训练权重是高度耦合的，改宽度等于把 DINOv2 的 1.42 亿张图“白练了”。所以 RF-DETR 在 backbone 这一侧只敢“变浅”不敢“变窄”：用前 $k$ 层（$k \in \{6, 8, 10, 12\}$）当作 backbone 即可，权重直接复用 DINOv2 的对应层。   
 
 **Supernet 的训练：怎么让一块布能裁出所有衣服？**    
 最大的难点在于：如果只随机采一个 subnet 来训，那些不被采到的“极端配置”（比如最深+最大窗口）就永远学不好。RF-DETR 采用了一种叫做 **Sandwich Rule（三明治采样）** 的策略（来自 BigNAS）——每一个 batch 内，同时训练以下几类 subnet：   
@@ -270,7 +270,7 @@ RF-DETR 采用 **进化算法（Evolutionary Search）** 搜索 Pareto 前沿：
 
 进化算法的每一次迭代，就像潮水悄悄上涨——一些原本露出的石头被淹没（被新的、更优的 subnet 支配），新的更高的石头从远处浮现（变异/交叉产生的新候选）。天际线随每一轮迭代被往上、往外推一段，但水位本身只升不降。   
 
-值得对比的是，这套**进化策略**在概念上和强化学习的 NAS 控制器是同样的目标、不同的策略：RL 用一个**参数化策略 $\pi_\phi$** 来输出架构序列、用 REINFORCE 优化 $\mathbb{E}_{a \sim \pi_\phi}[R(a)]$；而进化算法**不维护显式策略**，靠种群和选择算子隐式地“爬山”。在权重共享的设定下，每次评估代价非常低廉，进化算法的 sample-efficiency 反而更友好——这也是近几年 NAS 圈子从 RL 主流回归到进化/随机搜索的根本原因。   
+顺带跟强化学习版的 NAS 对比一下：两者目标相同、策略不同。RL 用一个**参数化策略 $\pi_\phi$** 来输出架构序列、用 REINFORCE 优化 $\mathbb{E}_{a \sim \pi_\phi}[R(a)]$；而进化算法**不维护显式策略**，靠种群和选择算子隐式地“爬山”。在权重共享的设定下，每次评估代价非常低廉，进化算法的 sample-efficiency 反而更友好——这也是近几年 NAS 圈子从 RL 主流回归到进化/随机搜索的根本原因。   
 
 **为何论文中提到必须在真实场景测试延迟？**    
 NAS 论文里一个经常被忽视的坑是：**FLOPs 不等于 Latency**。两个 FLOPs 相同的架构，在同一块 GPU 上可能跑出 1.5 倍的延迟差，原因来自 memory bandwidth、kernel launch overhead、算子的 fusion 友好度等等。   
@@ -305,7 +305,7 @@ $$\text{Latency}(a) \approx \sum_{l \in a} \text{LUT}[l]$$
 2. **Projector + 窗口/全局交替 Encoder 提供了灵活的骨架**（架构有大量可调维度）。
 3. **NAS 把这些维度自动调到了帕累托最优**（在每个延迟档位上把性能压榨到极致）。   
 
-三者环环相扣：没有 1 的强 backbone，再调架构精度也上不去；没有 2 的灵活骨架，NAS 没东西可搜；没有 3 的自动搜索，2 的灵活性也只会变成调参噩梦。RF-DETR 的工程优雅之处，正在于这三块的相互成全。     
+三者环环相扣：没有 1 的强 backbone，再调架构精度也上不去；没有 2 的灵活骨架，NAS 没东西可搜；没有 3 的自动搜索，2 的灵活性也只会变成调参噩梦。     
 
 ## 如何在 Roboflow 库中简单调用 RF-DETR 模型进行微调或推理    
 
@@ -550,9 +550,9 @@ model.train(
 
 ## 总结   
 
-我们从四个角度详细拆解了 RF-DETR：**DINOv2 自监督预训练**给出了强 backbone 与 Register Tokens 这样的细节修复，**Projector + 窗口/全局交替 Encoder**给出了灵活而高效的骨架，**Decoder Layer Pruning**让一份权重能跑出多档延迟，**NAS 自动搜索**则把这些组件在 Pareto 前沿上调到了极致。四者环环相扣，让 RF-DETR 成为 2025 年的 SOTA。
+我们从四个角度详细拆解了 RF-DETR：**DINOv2 自监督预训练**给出了强 backbone 与 Register Tokens 这样的细节修复，**Projector + 窗口/全局交替 Encoder**给出了灵活的骨架，**Decoder Layer Pruning**让一份权重能跑出多档延迟，**NAS 自动搜索**把这些组件在 Pareto 前沿上调到了极致。四块拼起来，就是当下实时检测领域的 SOTA。
 
-从 RF-DETR 身上其实也能看见现代 CV 的走向——在大模型档位 CNN 早已让出了精度优势，如今连一直引以为豪的推理延迟优势，也在 RF-DETR 这样的模型面前被进一步压缩。Transformer 这个架构的上限我们似乎还远没有摸到。RF-DETR 的出现证明：设计精妙的训练范式 + 自监督预训练 backbone，仍然可以让二维视觉模型继续向前迈一大步。
+从 RF-DETR 身上也能看见现代 CV 的一个趋势：CNN 在精度上早就不占优势，连过去引以为豪的推理延迟一项，也在 RF-DETR 这样的模型面前被追平甚至反超了。这条路的上限我们似乎还远没摸到。
 
 DETR 系列模型可能暂时就介绍到这里了，其他 DETR 变种你只要弄清楚 RT-DETR 和 RF-DETR，基本都能轻松理解。如果各位读者有什么问题，欢迎在 GitHub Discussions 中留言。
 
