@@ -1049,6 +1049,22 @@ article .prose a:not(.heading-anchor):not(.btn):hover {
 }
 
 /* 7. 表格条纹 + hover 提亮（无外边框，奇数行极淡） */
+article .prose table th,
+article .prose table td {
+  padding-inline: 1rem;
+}
+article .prose table th:first-child,
+article .prose table td:first-child {
+  padding-inline-start: 1.25rem;
+  border-start-start-radius: 0.375rem;
+  border-end-start-radius: 0.375rem;
+}
+article .prose table th:last-child,
+article .prose table td:last-child {
+  padding-inline-end: 1.25rem;
+  border-start-end-radius: 0.375rem;
+  border-end-end-radius: 0.375rem;
+}
 article .prose table tbody tr:nth-child(odd) {
   background: rgba(14, 165, 233, 0.05);
 }
