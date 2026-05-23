@@ -930,3 +930,138 @@ html.dark main img[src$=".svg"] {
   border-radius: 0.5rem;
 }
 
+/* ===== 正文页美化 ===== */
+
+/* 1. 顶部阅读进度条 */
+#read-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  width: 0;
+  background: linear-gradient(90deg, var(--he-accent), var(--he-spark));
+  z-index: 9999;
+  transition: width 0.1s linear;
+  box-shadow: 0 0 6px rgba(14, 165, 233, 0.5);
+  pointer-events: none;
+}
+
+/* 2. TOC 升级（左竖线 + 卡片 + sticky） */
+/* 干掉 Blowfish 模板里的黑色 dotted 边框（在 <details id="TOCView"> 的内层 div 上） */
+#TOCView > div {
+  border-style: none !important;
+}
+article nav#TableOfContents {
+  border-left: 2px solid var(--he-line-soft);
+  padding: 1rem 1.25rem;
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border-radius: 0.5rem;
+  position: sticky;
+  top: 5rem;
+  max-height: calc(100vh - 6rem);
+  overflow-y: auto;
+}
+html.dark article nav#TableOfContents {
+  background: rgba(15, 23, 42, 0.4);
+}
+article nav#TableOfContents a {
+  display: inline-block;
+  padding-left: 0.5rem;
+  border-left: 2px solid transparent;
+  transition: all 0.2s ease;
+}
+article nav#TableOfContents a:hover,
+article nav#TableOfContents a.active {
+  border-left-color: var(--he-accent);
+  color: var(--he-accent);
+  transform: translateX(2px);
+}
+
+/* 3. H2/H3 章节标题左竖线 + anchor 渐显 */
+article .prose h2,
+article .prose h3 {
+  position: relative;
+  padding-left: 0.75rem;
+}
+article .prose h2::before,
+article .prose h3::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 15%;
+  height: 70%;
+  background: var(--he-accent);
+  opacity: 0.6;
+  border-radius: 2px;
+}
+article .prose h2::before { width: 4px; }
+article .prose h3::before { width: 2.5px; }
+article .prose a.heading-anchor {
+  opacity: 0;
+  margin-left: 0.4rem;
+  color: var(--he-line);
+  transition: opacity 0.25s ease;
+}
+article .prose h1:hover a.heading-anchor,
+article .prose h2:hover a.heading-anchor,
+article .prose h3:hover a.heading-anchor,
+article .prose h4:hover a.heading-anchor {
+  opacity: 1;
+}
+
+/* 4. 引用块包装升级 */
+article .prose blockquote {
+  border-left: 4px solid var(--he-accent);
+  background: var(--he-line-soft);
+  border-radius: 0 0.5rem 0.5rem 0;
+  padding: 0.75rem 1.25rem;
+  margin: 1.25rem 0;
+}
+article .prose blockquote p {
+  margin: 0;
+  color: var(--he-muted);
+}
+
+/* 5. 代码块底部圆角 + 阴影（与现有 .codeblock-header 顶条衔接） */
+article .prose .highlight-wrapper {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+html.dark article .prose .highlight-wrapper {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* 6. 行内链接 underline 渐出动效 */
+article .prose a:not(.heading-anchor):not(.btn) {
+  text-decoration: none;
+  background-image: linear-gradient(var(--he-accent), var(--he-accent));
+  background-size: 0% 1px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition: background-size 0.3s ease;
+  padding-bottom: 1px;
+}
+article .prose a:not(.heading-anchor):not(.btn):hover {
+  background-size: 100% 1px;
+}
+
+/* 7. 表格条纹 + hover 提亮（无外边框，奇数行极淡） */
+article .prose table tbody tr:nth-child(odd) {
+  background: rgba(14, 165, 233, 0.05);
+}
+html.dark article .prose table tbody tr:nth-child(odd) {
+  background: rgba(56, 189, 248, 0.06);
+}
+article .prose table tbody tr {
+  transition: background 0.2s ease;
+}
+article .prose table tbody tr:hover {
+  background: rgba(14, 165, 233, 0.12);
+}
+html.dark article .prose table tbody tr:hover {
+  background: rgba(56, 189, 248, 0.14);
+}
+
