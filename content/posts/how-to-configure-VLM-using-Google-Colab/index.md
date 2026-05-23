@@ -2,7 +2,7 @@
 title: "如何使用Google Colab进行视觉-语言模型微调"
 date: 2026-05-23T15:11:45+08:00
 draft: false
-categories: ["multimodel"]   # 必须是英文 slug，可选：2d-vision / 3d-vision / multimodal / notes / linux / tech-talk
+categories: ["multimodal"]   # 必须是英文 slug，可选：2d-vision / 3d-vision / multimodal / notes / linux / tech-talk
 tags: ["VLM","LoRA"]                    # 中文/英文随意，例如 ["ROS", "Ubuntu"]
 description: "零基础实现VLM模型的微调demo"             # 一句话简介，会显示在卡片下和搜索结果
 showAuthor: true
