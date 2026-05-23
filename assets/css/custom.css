@@ -922,3 +922,11 @@ html.dark #home-friend-link {
   }
 }
 
+/* ===== 深色模式下文章中的 SVG 加白底 ===== */
+/* 原图为透明背景 + 黑字，深色主题下不可读，统一套白底 */
+html.dark main img[src$=".svg"] {
+  background-color: #ffffff;
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+}
+
