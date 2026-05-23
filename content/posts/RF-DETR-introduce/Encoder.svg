@@ -1,4 +1,5 @@
 <svg width="100%" viewBox="0 0 680 500" role="img" style="" xmlns="http://www.w3.org/2000/svg">
+<rect data-bg-injected="true" width="100%" height="100%" fill="#ffffff"/>
 <title style="fill:rgb(0, 0, 0);stroke:none;color:rgb(0, 0, 0);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto">窗口注意力 vs 全局注意力交替计算</title>
 <desc style="fill:rgb(0, 0, 0);stroke:none;color:rgb(0, 0, 0);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto">左侧展示窗口注意力只在局部区域计算，右侧展示全局注意力跨全图计算，RF-DETR 交替使用两者</desc>
 <defs>

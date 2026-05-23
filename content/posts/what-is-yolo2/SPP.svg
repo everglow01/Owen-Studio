@@ -1,4 +1,5 @@
 <svg width="100%" viewBox="0 0 680 869.02" role="img" style="" xmlns="http://www.w3.org/2000/svg">
+<rect data-bg-injected="true" width="100%" height="100%" fill="#ffffff"/>
 <title style="fill:rgb(0, 0, 0);stroke:none;color:rgb(0, 0, 0);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto">YOLOv4 SPP 模块详解</title>
 <desc style="fill:rgb(0, 0, 0);stroke:none;color:rgb(0, 0, 0);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto">SPP 模块结构：输入经 1×1 卷积降维后，同时送入 k=1,5,9,13 四个并行最大池化，保持空间尺寸，最后 Concat 沿通道拼接输出。</desc>
 <defs>
