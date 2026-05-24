@@ -1081,3 +1081,50 @@ html.dark article .prose table tbody tr:hover {
   background: rgba(56, 189, 248, 0.14);
 }
 
+/* ===== 首页底部 RSS 圆形按钮 ===== */
+.he-rss-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 7rem auto 0.75rem;
+}
+.he-rss {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 9999px;
+  color: var(--he-accent);
+  background: rgba(14, 165, 233, 0.08);
+  border: 1px solid var(--he-line-soft);
+  box-shadow: 0 2px 10px rgba(14, 165, 233, 0.12);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease, color 0.25s ease;
+}
+.he-rss svg {
+  width: 1.1rem;
+  height: 1.1rem;
+}
+.he-rss:hover {
+  transform: translateY(-2px) scale(1.05);
+  background: var(--he-accent);
+  color: #fff;
+  box-shadow: 0 6px 18px rgba(14, 165, 233, 0.35);
+}
+.he-rss-label {
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  color: var(--he-muted);
+  text-transform: uppercase;
+}
+html.dark .he-rss {
+  background: rgba(56, 189, 248, 0.1);
+  box-shadow: 0 2px 10px rgba(56, 189, 248, 0.15);
+}
+html.dark .he-rss:hover {
+  background: var(--he-accent);
+  color: #0f172a;
+  box-shadow: 0 6px 18px rgba(56, 189, 248, 0.4);
+}
+
