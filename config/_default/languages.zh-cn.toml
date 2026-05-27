@@ -18,4 +18,5 @@ title = "Owen Studio"
   links = [
     { email = "mailto:everglow818@outlook.com" },
     { github = "https://github.com/everglow01" },
+    { rss = "/Owen-Studio/index.xml" },
   ]

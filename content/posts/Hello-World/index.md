@@ -41,7 +41,9 @@ showDateUpdated: True             # 是否显示更新时间
 * 1.使用Google colab进行多模态模型微调
 * 2.镜头使用分享 新系列 
 * 3.ResNet 经典网络解析  
-* Ultralytics Platform 简单教程
+* 4.Ultralytics Platform 简单教程
+* 5.hermes agent、claude code的简单教程环境配置
+* 5.nerf、3Dgs数学原理和代码
 
 网站将持续更新基于二维视觉、三维视觉、多模态视觉等相关内容，计划在未来拓展更多模块。想要了解更多请查看我的[github主页](https://github.com/everglow01)  
 想要了解更多关于该站点技术请关注该网站在github的仓库，或在此篇博客下留言。
