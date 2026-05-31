@@ -9,7 +9,7 @@ showAuthor: true
 showDateUpdated: false
 ---
 
-{{</* katex */>}}
+{{< katex >}}
 <!-- ↑ 启用数学公式（$x$ 行内 / $$x$$ 块级 / KaTeX 语法）。如不需要数学，删除这一行可省 ~280KB 加载 -->
 
 <!-- 写正文。在这个目录下放：
